@@ -25,7 +25,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Check NodeJS
-      run: nvm use 18.12.1
+      run: ls -lah && nvm use 18.12.1
     - name: Install packages
       run: cd games-frontend && yarn install
     - name: Run build
