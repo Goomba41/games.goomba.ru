@@ -28,9 +28,9 @@ jobs:
     - name: Check NodeJS
       run: ls -lah && nvm use 18.12.1
     - name: Install packages
-      run: cd games-frontend && yarn install
+      run: yarn install
     - name: Run build
-      run: cd games-frontend && yarn run build
+      run: yarn run build
     - name: Syncing folders
       run: rsync -av --progress --delete dist/ ~/sites/games.spa/
     - name: Restart web-server
