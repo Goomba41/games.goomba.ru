@@ -25,4 +25,4 @@ jobs:
     - name: Install packages
       run: cd games-frontend && yarn install
     - name: Run build
-      run: yarn run build
+      run: cd games-frontend && yarn run build
