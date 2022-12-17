@@ -15,6 +15,7 @@ jobs:
     runs-on: self-hosted
 
     steps:
+    - run: whoami
     - run: nvm use 18.12.1
     - run: cd games-frontend && yarn install
     - run: yarn run build
