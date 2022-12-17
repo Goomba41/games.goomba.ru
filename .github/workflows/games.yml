@@ -17,6 +17,10 @@ jobs:
   build-frontend:
 
     runs-on: self-hosted
+    
+    defaults:
+      run:
+        working-directory: ./games-frontend
 
     steps:
     - uses: actions/checkout@v3
@@ -26,3 +30,7 @@ jobs:
       run: cd games-frontend && yarn install
     - name: Run build
       run: cd games-frontend && yarn run build
+    - name: Syncing folders
+      run: rsync -av --progress --delete dist/ ~/sites/games.spa/
+    - name: Restart web-server
+      run: sudo systemctl restart nginx
