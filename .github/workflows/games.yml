@@ -3,6 +3,10 @@
 
 name: games CI
 
+defaults:
+  run:
+    shell: bash -ieo pipefail {0}
+
 on:
   push:
     branches: [ "main" ]
@@ -15,7 +19,9 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - run: whoami
-    - run: nvm use 18.12.1
-    - run: cd games-frontend && yarn install
-    - run: yarn run build
+    - name: Check NodeJS
+      run: nvm use 18.12.1
+    - name: Install packages
+      run: cd games-frontend && yarn install
+    - name: Run build
+      run: yarn run build
