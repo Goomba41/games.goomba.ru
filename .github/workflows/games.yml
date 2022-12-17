@@ -21,6 +21,7 @@ jobs:
     defaults:
       run:
         working-directory: ./games-frontend
+        shell: bash -ieo pipefail {0}
 
     steps:
     - uses: actions/checkout@v3
