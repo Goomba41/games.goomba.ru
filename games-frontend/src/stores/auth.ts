@@ -8,7 +8,7 @@ export const useAuthStore = defineStore({
     userManagerSettings: {
       steam: {
         authority: "https://steamcommunity.com/openid",
-        client_id: "",
+        client_id: "B9A7895AFEE1428F9CB5542D50BEE12D",
         redirect_uri: "http://localhost:5173/openid/callback",
         client_secret: "",
         post_logout_redirect_uri: "http://localhost:5173/login",
