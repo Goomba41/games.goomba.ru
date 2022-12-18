@@ -6,7 +6,7 @@ export const useAuthStore = defineStore({
   state: () => ({}),
   actions: {
     signin(provider: "steam" = "steam") {
-      axios.get(`http://localhost:3000/auth/${provider}`);
+      axios.get(`/api/auth/${provider}`);
     },
   },
 });
