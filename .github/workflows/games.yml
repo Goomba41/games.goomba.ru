@@ -4,34 +4,54 @@
 name: games CI
 
 defaults:
-  run:
-    shell: bash -ieo pipefail {0}
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-jobs:
-  build-frontend:
-
-    runs-on: self-hosted
-    
-    defaults:
-      run:
-        working-directory: ./games-frontend
+    run:
         shell: bash -ieo pipefail {0}
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Check NodeJS
-      run: nvm use 18.12.1
-    - name: Install packages
-      run: yarn install
-    - name: Run build
-      run: yarn run build
-    - name: Syncing folders
-      run: rsync -av --progress --delete dist/ ~/sites/games.spa/
-    - name: Restart web-server
-      run: sudo systemctl restart nginx
+on:
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
+
+jobs:
+    build-frontend:
+        runs-on: self-hosted
+
+        defaults:
+            run:
+                working-directory: ./games-frontend
+                shell: bash -ieo pipefail {0}
+
+        steps:
+            - uses: actions/checkout@v3
+            - name: Check NodeJS
+              run: nvm use 18.12.1
+            - name: Install packages
+              run: yarn install
+            - name: Run build
+              run: yarn run build
+            - name: Syncing folders
+              run: rsync -av --progress --delete dist/ ~/sites/games/frontend/
+            - name: Restart web-server
+              run: sudo systemctl restart nginx
+
+    build-backend:
+        runs-on: self-hosted
+
+        defaults:
+            run:
+                working-directory: ./games-backend
+                shell: bash -ieo pipefail {0}
+
+        steps:
+            - uses: actions/checkout@v3
+            - name: Check NodeJS
+              run: nvm use 18.12.1
+            - name: Install packages
+              run: yarn install
+            - name: Run build
+              run: yarn run build
+            - name: Syncing folders
+              run: rsync -av --progress --delete ./ ~/sites/games/backend/
+            - name: Restart web-server
+              run: pm2 restart games
