@@ -8,5 +8,8 @@ export const useAuthStore = defineStore({
     signin(provider: "steam" = "steam") {
       axios.get(`/api/auth/${provider}`);
     },
+    test() {
+      axios.get(`/api/users`);
+    },
   },
 });
