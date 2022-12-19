@@ -1,7 +1,7 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 
-@Controller('users')
+@Controller('api/users')
 export class UsersController {
   // constructor(private usersService: UsersService) {}
   //   @Post()
@@ -12,4 +12,8 @@ export class UsersController {
   // async signIn() {
   //   this.usersService.signIn();
   // }
+  @Get()
+  test(): string {
+    return 'find all';
+  }
 }
