@@ -1,0 +1,17 @@
+@import "reset.css";
+@import "roboto.css";
+
+@font-face {
+  font-family: "Pixel";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/PressStart2P/PressStart2P-Regular.ttf") format("ttf");
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html * {
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+}
