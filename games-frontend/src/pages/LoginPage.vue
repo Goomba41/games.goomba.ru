@@ -7,35 +7,51 @@
 
     <h1 class="tw-mt-auto">Войти</h1>
     <div class="providers-wrapper">
-      <button class="provider-button steam">
+      <button class="provider-button steam" @click="authStore.signin()">
         <awesome-icon
           class="provider-button__icon"
           icon="fa-brands fa-steam"
           fixed-width
         />
       </button>
-      <button class="provider-button google" disabled>
+      <button
+        class="provider-button google"
+        disabled
+        @click="authStore.signin('google')"
+      >
         <awesome-icon
           class="provider-button__icon"
           icon="fa-brands fa-google"
           fixed-width
         />
       </button>
-      <button class="provider-button github" disabled>
+      <button
+        class="provider-button github"
+        disabled
+        @click="authStore.signin('github')"
+      >
         <awesome-icon
           class="provider-button__icon"
           icon="fa-brands fa-github"
           fixed-width
         />
       </button>
-      <button class="provider-button microsoft" disabled>
+      <button
+        class="provider-button microsoft"
+        disabled
+        @click="authStore.signin('microsoft')"
+      >
         <awesome-icon
           class="provider-button__icon"
           icon="fa-brands fa-microsoft"
           fixed-width
         />
       </button>
-      <button class="provider-button twitch" disabled>
+      <button
+        class="provider-button twitch"
+        disabled
+        @click="authStore.signin('twitch')"
+      >
         <awesome-icon
           class="provider-button__icon"
           icon="fa-brands fa-twitch"
