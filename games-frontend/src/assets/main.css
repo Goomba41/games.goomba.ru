@@ -5,7 +5,8 @@
   font-family: "Pixel";
   font-style: normal;
   font-weight: 400;
-  src: url("/fonts/PressStart2P/PressStart2P-Regular.ttf") format("ttf");
+  font-display: auto;
+  src: url("./fonts/PressStart2P/PressStart2P-Regular.ttf") format("truetype");
 }
 
 @tailwind base;

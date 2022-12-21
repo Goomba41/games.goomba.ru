@@ -1,6 +1,9 @@
 <template>
   <div class="page-wrapper">
-    <div class="appname" title="Персональная игровая статистика">ПИС</div>
+    <div class="appname" title="Персональная игровая статистика">
+      <logo class="logo" />
+      <div class="text">ПИС<sub>ь</sub></div>
+    </div>
 
     <h1 class="tw-mt-auto">Войти</h1>
     <div class="providers-wrapper">
@@ -32,10 +35,10 @@
           fixed-width
         />
       </button>
-      <button class="provider-button vk" disabled>
+      <button class="provider-button twitch" disabled>
         <awesome-icon
           class="provider-button__icon"
-          icon="fa-brands fa-vk"
+          icon="fa-brands fa-twitch"
           fixed-width
         />
       </button>
@@ -53,6 +56,8 @@
 <script lang="ts" setup>
 import { useAuthStore } from "@/stores/auth";
 
+import logo from "@/components/icons/AppLogotype.vue";
+
 const authStore = useAuthStore();
 </script>
 
@@ -67,7 +72,24 @@ const authStore = useAuthStore();
   h1,
   h3,
   .appname {
-    @apply tw-text-gray-300;
+    @apply tw-text-gray-300 tw-flex tw-text-5xl tw-pt-10;
+
+    sub {
+      @apply tw-text-base;
+    }
+
+    .logo {
+      @apply tw-mr-4 tw-w-12 tw-h-12;
+    }
+
+    .text {
+      @apply tw-h-12 tw-relative tw-top-1;
+    }
+
+    .text,
+    sub {
+      font-family: "Pixel";
+    }
   }
 
   h1 {
@@ -78,19 +100,15 @@ const authStore = useAuthStore();
     @apply tw-text-sm;
   }
 
-  .appname {
-    font-family: Pixel;
-    @apply tw-text-6xl;
-  }
-
   .providers-wrapper {
-    @apply tw-px-6 tw-w-full tw-grid tw-grid-cols-4 tw-grid-flow-row tw-gap-2;
-    // tw-justify-center tw-flex tw-flex-row tw-flex-wrap;
+    grid-template-columns: repeat(auto-fill, 5rem);
+    @apply tw-px-6 tw-w-full tw-grid tw-auto-cols-max tw-grid-flow-row tw-gap-2 tw-place-content-center;
+    // tw-justify-center tw-flex tw-flex-row tw-flex-wrap tw-grid-cols-4;
   }
 
   .provider-button {
     @apply tw-text-gray-300 tw-text-4xl tw-h-20 tw-w-20 tw-text-center tw-rounded-2xl;
-    // tw-mr-3 last:tw-mr-0;
+    //  tw-mr-3 last:tw-mr-0
 
     &.steam {
       background: linear-gradient(
@@ -128,11 +146,11 @@ const authStore = useAuthStore();
         background: linear-gradient(90deg, #f65314 30%, #a03207 100%);
       }
     }
-    &.vk {
-      background: linear-gradient(90deg, #7a9dc7 0%, #16365c 100%);
+    &.twitch {
+      background: linear-gradient(90deg, #9146ff 0%, #5017a6 100%);
 
       &:hover {
-        background: linear-gradient(90deg, #7a9dc7 30%, #16365c 100%);
+        background: linear-gradient(90deg, #9146ff 30%, #5017a6 100%);
       }
     }
 

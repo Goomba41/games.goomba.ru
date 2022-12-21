@@ -8,13 +8,12 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 /* import specific icons */
-// import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import {
   faGoogle,
   faSteam,
   faGithub,
   faMicrosoft,
-  faVk,
+  faTwitch,
 } from "@fortawesome/free-brands-svg-icons";
 
 import App from "./App.vue";
@@ -22,7 +21,7 @@ import router from "./router";
 
 import "./assets/main.css";
 
-library.add(faSteam, faGoogle, faGithub, faMicrosoft, faVk);
+library.add(faSteam, faGoogle, faGithub, faMicrosoft, faTwitch);
 
 const app = createApp(App);
 
