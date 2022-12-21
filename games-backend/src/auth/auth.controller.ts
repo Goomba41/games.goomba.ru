@@ -23,6 +23,6 @@ export class AuthController {
     const protocol = this.configService.get<string>('app.protocol');
     const hostname = isDev ? `${host}:${port}` : host;
 
-    return `${protocol}://${hostname}/`;
+    return { url: `${protocol}://${hostname}/` };
   }
 }
