@@ -1,15 +1,22 @@
-import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-steam';
-
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+
+import { Strategy } from 'passport-steam';
 
 @Injectable()
 export class SteamStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private configService: ConfigService) {
+    const isDev = configService.get<string>('app.mode') === 'development';
+    const host = configService.get<string>('app.host');
+    const port = configService.get<string>('app.port');
+    const protocol = configService.get<string>('app.protocol');
+    const hostname = isDev ? `${host}:${port}` : host;
+
     super({
-      returnURL: 'http://localhost:3000/api/auth/steam/return',
-      realm: 'http://localhost:3000/',
-      apiKey: 'B9A7895AFEE1428F9CB5542D50BEE12D',
+      returnURL: `${protocol}://${hostname}/api/auth/steam/return`,
+      realm: `${protocol}://${hostname}/`,
+      apiKey: configService.get<string>('tokens.steam'),
     });
   }
 

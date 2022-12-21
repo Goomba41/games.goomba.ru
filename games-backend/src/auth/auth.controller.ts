@@ -2,7 +2,7 @@ import { Controller, Get, Redirect, UseGuards } from '@nestjs/common';
 
 import { SteamAuthGuard } from './steam.guard';
 
-@Controller('api/auth')
+@Controller('auth')
 export class AuthController {
   @Get('steam')
   @UseGuards(SteamAuthGuard)
