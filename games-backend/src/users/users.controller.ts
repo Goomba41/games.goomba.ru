@@ -8,23 +8,13 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  //   @Post()
-  //   async register() {
-  //     this.usersService.register();
-  //   };
-  // @Post()
-  // async signIn() {
-  //   this.usersService.signIn();
-  // }
-
   @Get()
   readAll(): Promise<User[]> {
     return this.usersService.readAll();
   }
 
   @Get(':id')
-  readOne(@Param() params): string {
-    console.log(params.id);
-    return `find one by steamid ${params.id}`;
+  readOne(@Param() params): Promise<User> {
+    return this.usersService.readOne(params.id);
   }
 }
