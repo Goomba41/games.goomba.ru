@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
 
 import { SteamStrategy, SteamRegStrategy } from './steam.strategy';
 
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
+
+import { UsersModule } from 'src/users/users.module';
+import { UsersService } from 'src/users/users.service';
+
 @Module({
-  providers: [AuthService, SteamStrategy, SteamRegStrategy],
+  imports: [UsersModule],
+  providers: [AuthService, UsersService, SteamStrategy, SteamRegStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 
 import { PassportModule } from '@nestjs/passport';
-import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import * as Joi from 'joi';
+import { DataSource } from 'typeorm';
 
 import dbConf from './config/database.config';
 import tknConf from './config/tokens.config';
@@ -11,6 +13,8 @@ import appConf from './config/app.config';
 
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+
+// import { User } from './users/users.entity';
 
 @Module({
   imports: [
@@ -38,6 +42,23 @@ import { UsersModule } from './users/users.module';
         DATABASE_PASSWORD: Joi.string().required(),
       }),
     }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('DATABASE_HOST'),
+        port: +configService.get('DATABASE_PORT'),
+        username: configService.get('DATABASE_USER'),
+        password: configService.get('DATABASE_PASSWORD'),
+        database: configService.get('DATABASE_NAME'),
+        autoLoadEntities: true,
+        // entities: [User],
+        // synchronize: true,
+      }),
+      inject: [ConfigService],
+    }),
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private dataSource: DataSource) {}
+}

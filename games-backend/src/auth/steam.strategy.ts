@@ -4,6 +4,8 @@ import { PassportStrategy } from '@nestjs/passport';
 
 import { Strategy } from 'passport-steam';
 
+import { UsersService } from 'src/users/users.service';
+
 @Injectable()
 export class SteamStrategy extends PassportStrategy(Strategy, 'steamSignin') {
   constructor(private configService: ConfigService) {
@@ -24,7 +26,6 @@ export class SteamStrategy extends PassportStrategy(Strategy, 'steamSignin') {
     // User.findByOpenID({ openId: identifier }, function (err, user) {
     //     return done(err, user);
     // });
-    console.log('signin');
     return done('', profile);
   }
 }
@@ -34,7 +35,10 @@ export class SteamRegStrategy extends PassportStrategy(
   Strategy,
   'steamRegister',
 ) {
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private usersService: UsersService,
+  ) {
     const isDev = configService.get<string>('app.mode') === 'development';
     const host = configService.get<string>('app.host');
     const port = configService.get<string>('app.portB');
@@ -49,9 +53,21 @@ export class SteamRegStrategy extends PassportStrategy(
   }
 
   async validate(identifier, profile, done) {
-    // User.findByOpenID({ openId: identifier }, function (err, user) {
-    //     return done(err, user);
-    // });
-    return done('', profile);
+    const profileJson = profile._json;
+    const profileSteamId = profile._json.steamid;
+    console.log(profileSteamId);
+
+    try {
+      const existedUser = await this.usersService.readOne(profileSteamId);
+      const existedUsers = await this.usersService.readAll();
+      console.log(existedUser);
+      console.log(existedUsers);
+
+      console.log(existedUser?.id);
+
+      return done(null, profile._json);
+    } catch (err) {
+      return done(err, profile._json);
+    }
   }
 }

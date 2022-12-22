@@ -41,7 +41,7 @@ export class AuthController {
     const port = this.configService.get<string>('app.portF');
     const protocol = this.configService.get<string>('app.protocol');
     const hostname = isDev ? `${host}${port ? ':' : ''}${port}` : host;
-    console.log('registered success');
+
     return { url: `${protocol}://${hostname}/` };
   }
 }

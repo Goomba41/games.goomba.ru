@@ -1,9 +1,13 @@
-import { Controller, Get, Post } from '@nestjs/common';
-// import { UsersService } from './users.service';
+import { Controller, Get, Param } from '@nestjs/common';
+
+import { User } from './users.entity';
+
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  // constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService) {}
+
   //   @Post()
   //   async register() {
   //     this.usersService.register();
@@ -12,8 +16,15 @@ export class UsersController {
   // async signIn() {
   //   this.usersService.signIn();
   // }
+
   @Get()
-  test(): string {
-    return 'find all';
+  readAll(): Promise<User[]> {
+    return this.usersService.readAll();
+  }
+
+  @Get(':id')
+  readOne(@Param() params): string {
+    console.log(params.id);
+    return `find one by steamid ${params.id}`;
   }
 }
