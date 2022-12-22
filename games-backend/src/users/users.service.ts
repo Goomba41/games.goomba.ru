@@ -5,6 +5,28 @@ import { DeleteResult, Repository } from 'typeorm';
 
 import { User } from './users.entity';
 
+interface ISteamProfile {
+  steamid: string;
+  communityvisibilitystate: number;
+  profilestate: number;
+  personaname: string;
+  commentpermission: number;
+  profileurl: string;
+  avatar: string;
+  avatarmedium: string;
+  avatarfull: string;
+  avatarhash: string;
+  lastlogoff: number;
+  personastate: number;
+  realname: string;
+  primaryclanid: string;
+  timecreated: number;
+  personastateflags: number;
+  loccountrycode: string;
+  locstatecode: string;
+  loccityid: number;
+}
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -13,15 +35,17 @@ export class UsersService {
   ) {}
 
   // TODO
-  create(): Promise<User> {
+  create(steamProfile: ISteamProfile): Promise<User> {
     // const user = new User();
 
-    const newUser = this.usersRepository.create();
+    // user.id = steamProfile.steamid;
+
+    const newUser = this.usersRepository.create(steamProfile);
     return this.usersRepository.save(newUser);
   }
 
-  readOne(id: string): Promise<User> {
-    return this.usersRepository.findOneBy({ id: id });
+  readOne(steamid: string): Promise<User> {
+    return this.usersRepository.findOneBy({ steamid });
   }
 
   readAll(): Promise<User[]> {

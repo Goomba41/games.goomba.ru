@@ -54,7 +54,7 @@ import { UsersModule } from './users/users.module';
         database: configService.get('DATABASE_NAME'),
         autoLoadEntities: true,
         // entities: [User],
-        // synchronize: true,
+        synchronize: true,
       }),
     }),
   ],

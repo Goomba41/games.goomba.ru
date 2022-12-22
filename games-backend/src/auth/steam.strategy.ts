@@ -55,19 +55,14 @@ export class SteamRegStrategy extends PassportStrategy(
   async validate(identifier, profile, done) {
     const profileJson = profile._json;
     const profileSteamId = profile._json.steamid;
-    console.log(profileSteamId);
 
-    try {
-      const existedUser = await this.usersService.readOne(profileSteamId);
-      const existedUsers = await this.usersService.readAll();
-      console.log(existedUser);
-      console.log(existedUsers);
-
-      console.log(existedUser?.id);
-
+    const existedUser = await this.usersService.readOne(profileSteamId);
+    if (existedUser) {
       return done(null, profile._json);
-    } catch (err) {
-      return done(err, profile._json);
     }
+
+    await this.usersService.create(profileJson).then(() => {
+      return done(null, profile._json);
+    });
   }
 }
