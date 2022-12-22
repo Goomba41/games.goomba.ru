@@ -7,7 +7,7 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  const port = configService.get('APP_PORT');
+  const port = configService.get('APP_PORT_BACK');
 
   app.setGlobalPrefix('api/');
 

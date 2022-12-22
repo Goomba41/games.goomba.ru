@@ -19,5 +19,17 @@ export const useAuthStore = defineStore({
           break;
       }
     },
+    register(provider: "steam" = "steam") {
+      switch (provider) {
+        case "steam":
+          window.location.href = `/api/auth/${provider}/registration`;
+          break;
+
+        default:
+          console.log("no steam");
+          axios.get(`/api/auth/${provider}`);
+          break;
+      }
+    },
   },
 });

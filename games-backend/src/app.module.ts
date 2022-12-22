@@ -26,12 +26,13 @@ import { UsersModule } from './users/users.module';
           .valid('development', 'production')
           .default('development')
           .required(),
-        APP_HOST: Joi.string().default('localhost').required(),
-        APP_PORT: Joi.number().default(3000).required(),
-        APP_PROTOCOL: Joi.string().default('https').required(),
+        APP_HOST: Joi.string().default('localhost'),
+        APP_PORT_BACK: Joi.number().default(3000),
+        APP_PORT_FRONT: Joi.number(),
+        APP_PROTOCOL: Joi.string().default('https'),
         API_TOKEN_STEAM: Joi.string().required(),
-        DATABASE_HOST: Joi.string().default('localhost').required(),
-        DATABASE_PORT: Joi.number().default(5432).required(),
+        DATABASE_HOST: Joi.string().default('localhost'),
+        DATABASE_PORT: Joi.number().default(5432),
         DATABASE_NAME: Joi.string().required(),
         DATABASE_USER: Joi.string().required(),
         DATABASE_PASSWORD: Joi.string().required(),
