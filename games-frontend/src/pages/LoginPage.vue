@@ -83,7 +83,7 @@ const authStore = useAuthStore();
       no-repeat,
     url(@/assets/images/login_bg.jpg) center center no-repeat, #181a21;
 
-  @apply tw-h-full tw-w-full tw-flex tw-flex-col tw-items-center tw-justify-center;
+  @apply tw-w-full tw-flex tw-flex-col tw-items-center tw-justify-center tw-flex-grow;
 
   h1,
   h3,
@@ -118,7 +118,9 @@ const authStore = useAuthStore();
 
   .providers-wrapper {
     grid-template-columns: repeat(auto-fill, 5rem);
-    @apply tw-px-6 tw-w-full tw-grid tw-auto-cols-max tw-grid-flow-row tw-gap-2 tw-place-content-center;
+    @apply tw-px-6 tw-grid tw-auto-cols-max tw-grid-flow-row
+      tw-gap-2 tw-place-content-center
+      max-[480px]:tw-w-full min-[480px]:tw-max-w-[480px];
     // tw-justify-center tw-flex tw-flex-row tw-flex-wrap tw-grid-cols-4;
   }
 
