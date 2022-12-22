@@ -1,10 +1,5 @@
 <template>
   <div class="page-wrapper">
-    <div class="appname" title="Персональная игровая статистика">
-      <logo class="logo" />
-      <div class="text">ПИС<sub>ь</sub></div>
-    </div>
-
     <h1 class="tw-mt-auto">Войти</h1>
     <div class="providers-wrapper">
       <button class="provider-button steam" @click="authStore.signin()">
@@ -72,8 +67,6 @@
 <script lang="ts" setup>
 import { useAuthStore } from "@/stores/auth";
 
-import logo from "@/components/icons/AppLogotype.vue";
-
 const authStore = useAuthStore();
 </script>
 
@@ -83,29 +76,9 @@ const authStore = useAuthStore();
       no-repeat,
     url(@/assets/images/login_bg.jpg) center center no-repeat, #181a21;
 
-  @apply tw-w-full tw-flex tw-flex-col tw-items-center tw-justify-center tw-flex-grow;
-
   h1,
-  h3,
-  .appname {
-    @apply tw-text-gray-300 tw-flex tw-text-5xl tw-pt-10;
-
-    sub {
-      @apply tw-text-base;
-    }
-
-    .logo {
-      @apply tw-mr-4 tw-w-12 tw-h-12;
-    }
-
-    .text {
-      @apply tw-h-12 tw-relative tw-top-1;
-    }
-
-    .text,
-    sub {
-      font-family: "Pixel";
-    }
+  h3 {
+    @apply tw-text-gray-300;
   }
 
   h1 {
