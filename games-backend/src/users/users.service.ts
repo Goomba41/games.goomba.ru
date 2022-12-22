@@ -53,12 +53,9 @@ export class UsersService {
   }
 
   async signin(steamid: string): Promise<boolean> {
-    // const existedUser = await this.usersRepository.findOneBy({ steamid });
     const existedUser = await this.usersRepository.findOneBy({
-      steamid: '76561198053739731',
+      steamid,
     });
-
-    console.log(existedUser);
 
     if (existedUser) {
       existedUser.signin = luxon.now().toJSDate();

@@ -30,7 +30,6 @@ export class SteamStrategy extends PassportStrategy(Strategy, 'steamSignin') {
     const profileSteamId = profile._json.steamid;
 
     const signedin = await this.usersService.signin(profileSteamId);
-    console.log(signedin);
     if (signedin) {
       return done(null, profileJson);
     } else {
