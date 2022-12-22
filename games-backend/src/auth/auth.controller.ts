@@ -7,19 +7,19 @@ import { SteamAuthGuard, SteamRegGuard } from './steam.guard';
 export class AuthController {
   constructor(private configService: ConfigService) {}
 
-  @Get('steam')
+  @Get('steam/signin')
   @UseGuards(SteamAuthGuard)
   async signin() {
     // call redirect to steam login page
   }
 
-  @Get('steam/registration')
+  @Get('steam/signup')
   @UseGuards(SteamRegGuard)
-  async register() {
+  async signup() {
     // call redirect to steam login page
   }
 
-  @Get('steam/signin')
+  @Get('steam/signin/success')
   @Redirect()
   @UseGuards(SteamAuthGuard)
   async steamSignin() {
@@ -32,7 +32,7 @@ export class AuthController {
     return { url: `${protocol}://${hostname}/` };
   }
 
-  @Get('steam/registered')
+  @Get('steam/signup/success')
   @Redirect()
   @UseGuards(SteamRegGuard)
   async steamRegister() {

@@ -8,7 +8,10 @@ import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class SteamStrategy extends PassportStrategy(Strategy, 'steamSignin') {
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private usersService: UsersService,
+  ) {
     const isDev = configService.get<string>('app.mode') === 'development';
     const host = configService.get<string>('app.host');
     const port = configService.get<string>('app.portB');
@@ -16,24 +19,30 @@ export class SteamStrategy extends PassportStrategy(Strategy, 'steamSignin') {
     const hostname = isDev ? `${host}:${port}` : host;
 
     super({
-      returnURL: `${protocol}://${hostname}/api/auth/steam/signin`,
+      returnURL: `${protocol}://${hostname}/api/auth/steam/signin/success`,
       realm: `${protocol}://${hostname}/`,
       apiKey: configService.get<string>('tokens.steam'),
     });
   }
 
   async validate(identifier, profile, done) {
-    // User.findByOpenID({ openId: identifier }, function (err, user) {
-    //     return done(err, user);
-    // });
-    return done('', profile);
+    const profileJson = profile._json;
+    const profileSteamId = profile._json.steamid;
+
+    const signedin = await this.usersService.signin(profileSteamId);
+    console.log(signedin);
+    if (signedin) {
+      return done(null, profileJson);
+    } else {
+      return done('error: need to sign up', null);
+    }
   }
 }
 
 @Injectable()
 export class SteamRegStrategy extends PassportStrategy(
   Strategy,
-  'steamRegister',
+  'steamSignup',
 ) {
   constructor(
     private configService: ConfigService,
@@ -46,7 +55,7 @@ export class SteamRegStrategy extends PassportStrategy(
     const hostname = isDev ? `${host}:${port}` : host;
 
     super({
-      returnURL: `${protocol}://${hostname}/api/auth/steam/registered`,
+      returnURL: `${protocol}://${hostname}/api/auth/steam/signup/success`,
       realm: `${protocol}://${hostname}/`,
       apiKey: configService.get<string>('tokens.steam'),
     });
@@ -56,13 +65,13 @@ export class SteamRegStrategy extends PassportStrategy(
     const profileJson = profile._json;
     const profileSteamId = profile._json.steamid;
 
-    const existedUser = await this.usersService.readOne(profileSteamId);
-    if (existedUser) {
-      return done(null, profile._json);
+    const signedin = await this.usersService.signin(profileSteamId);
+    if (signedin) {
+      return done(null, profileJson);
     }
 
     await this.usersService.create(profileJson).then(() => {
-      return done(null, profile._json);
+      return done(null, profileJson);
     });
   }
 }

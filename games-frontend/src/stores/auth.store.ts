@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import axios from "axios";
 
 type TProviders = "steam" | "google" | "github" | "microsoft" | "twitch";
 
@@ -10,24 +9,20 @@ export const useAuthStore = defineStore({
     signin(provider: TProviders = "steam") {
       switch (provider) {
         case "steam":
-          window.location.href = `/api/auth/${provider}`;
+          window.location.href = `/api/auth/${provider}/signin`;
           break;
 
         default:
-          console.log("no steam");
-          axios.get(`/api/auth/${provider}`);
           break;
       }
     },
-    register(provider: "steam" = "steam") {
+    signup(provider: "steam" = "steam") {
       switch (provider) {
         case "steam":
-          window.location.href = `/api/auth/${provider}/registration`;
+          window.location.href = `/api/auth/${provider}/signup`;
           break;
 
         default:
-          console.log("no steam");
-          axios.get(`/api/auth/${provider}`);
           break;
       }
     },

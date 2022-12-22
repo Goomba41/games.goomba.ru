@@ -14,8 +14,6 @@ import appConf from './config/app.config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 
-// import { User } from './users/users.entity';
-
 @Module({
   imports: [
     UsersModule,
@@ -53,7 +51,6 @@ import { UsersModule } from './users/users.module';
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
         autoLoadEntities: true,
-        // entities: [User],
         synchronize: true,
       }),
     }),

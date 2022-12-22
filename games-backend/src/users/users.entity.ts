@@ -1,16 +1,15 @@
-import { Entity, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity({ name: 'users', schema: 'games' })
-export class User {
-  @PrimaryColumn({ unique: true })
-  steamid!: string;
+export default class User {
+  @PrimaryColumn({ unique: true, comment: 'SteamId для использования в API' })
+  steamid: string;
 
-  //   @Column()
-  //   firstName: string;
+  @CreateDateColumn({
+    comment: 'Дата регистрации',
+  })
+  signup: Date;
 
-  //   @Column()
-  //   lastName: string;
-
-  //   @Column({ default: true })
-  //   isActive: boolean;
+  @CreateDateColumn({ comment: 'Дата последнего входа' })
+  signin: Date;
 }

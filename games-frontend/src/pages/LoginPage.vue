@@ -56,7 +56,7 @@
     </div>
     <h3 class="tw-pt-12 tw-pb-6">или зарегистрироваться</h3>
     <button
-      @click="authStore.register()"
+      @click="authStore.signup()"
       class="provider-button register-button tw-mb-auto"
     >
       <awesome-icon icon="fa-brands fa-steam" fixed-width />

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { DateTime as luxon } from 'luxon';
 import { DeleteResult, Repository } from 'typeorm';
 
-import { User } from './users.entity';
+import User from './users.entity';
 
 interface ISteamProfile {
   steamid: string;
@@ -34,12 +35,7 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  // TODO
   create(steamProfile: ISteamProfile): Promise<User> {
-    // const user = new User();
-
-    // user.id = steamProfile.steamid;
-
     const newUser = this.usersRepository.create(steamProfile);
     return this.usersRepository.save(newUser);
   }
@@ -52,7 +48,24 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async delete(id: string): Promise<DeleteResult> {
-    return await this.usersRepository.delete(id);
+  async delete(steamid: string): Promise<DeleteResult> {
+    return await this.usersRepository.delete(steamid);
+  }
+
+  async signin(steamid: string): Promise<boolean> {
+    // const existedUser = await this.usersRepository.findOneBy({ steamid });
+    const existedUser = await this.usersRepository.findOneBy({
+      steamid: '76561198053739731',
+    });
+
+    console.log(existedUser);
+
+    if (existedUser) {
+      existedUser.signin = luxon.now().toJSDate();
+      this.usersRepository.save(existedUser);
+      return true;
+    }
+
+    return false;
   }
 }
