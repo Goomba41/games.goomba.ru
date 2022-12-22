@@ -53,5 +53,7 @@ jobs:
               run: yarn run build
             - name: Syncing folders
               run: rsync -av --progress --delete ./ ~/sites/games/backend/
+            - name: Linking env variables
+              run: ln -s ~/sites/games/.env ~/sites/games/backend/dist/
             - name: Restart web-server
               run: pm2 restart games
