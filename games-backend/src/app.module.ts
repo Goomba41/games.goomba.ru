@@ -10,6 +10,7 @@ import { DataSource } from 'typeorm';
 import dbConf from './config/database.config';
 import tknConf from './config/tokens.config';
 import appConf from './config/app.config';
+import scrConf from './config/secrets.config';
 
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -22,7 +23,7 @@ import { UsersModule } from './users/users.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      load: [dbConf, tknConf, appConf],
+      load: [dbConf, tknConf, appConf, scrConf],
       validationSchema: Joi.object({
         APP_MODE: Joi.string()
           .valid('development', 'production')
