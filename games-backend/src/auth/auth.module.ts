@@ -22,6 +22,7 @@ import { UsersService } from 'src/users/users.service';
 export class AuthModule implements NestModule {
   constructor(private configService: ConfigService) {}
 
+  secure = this.configService.get('app.mode') !== 'development';
   host = this.configService.get('database.host');
   port = +this.configService.get('database.port');
   user = this.configService.get('database.user');
@@ -44,7 +45,12 @@ export class AuthModule implements NestModule {
           secret: this.secret,
           resave: false,
           saveUninitialized: false,
-          cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
+          cookie: {
+            // maxAge: 60 * 1000,
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+            secure: this.secure,
+            sameSite: 'lax',
+          },
           // Insert express-session options here
         }),
         passport.session(),

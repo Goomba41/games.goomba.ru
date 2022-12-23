@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
   Redirect,
   Req,
+  Session,
   UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -56,9 +57,10 @@ export class AuthController {
   @Get('signout')
   @UseGuards(IsAuthenticatedGuard)
   async signout(@Req() request) {
-    const logoutError = await new Promise((resolve) =>
-      request.logOut({ keepSessionInfo: false }, (error) => resolve(error)),
-    );
+    const logoutError = await new Promise((resolve) => {
+      console.log(request.sessionID);
+      request.logOut({ keepSessionInfo: false }, (error) => resolve(error));
+    });
 
     if (logoutError) {
       console.error(logoutError);
@@ -68,6 +70,20 @@ export class AuthController {
 
     return {
       logout: true,
+    };
+  }
+
+  @Get('check')
+  async state(@Session() session, @Req() request) {
+    if (request.isAuthenticated()) {
+      return {
+        authenticated: request.isAuthenticated(),
+        user: request.session.passport.user,
+      };
+    }
+    return {
+      authenticated: request.isAuthenticated(),
+      user: null,
     };
   }
 }

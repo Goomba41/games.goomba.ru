@@ -22,8 +22,9 @@ function test() {
   });
 }
 function signout() {
-  authStore.signout().then((response: any) => {
+  authStore.signout().then(async (response: any) => {
     console.log(response);
+    await authStore.sync();
     router.push({ name: "login" });
   });
 }
