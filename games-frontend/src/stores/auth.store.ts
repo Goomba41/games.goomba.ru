@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import axios from "axios";
 
 type TProviders = "steam" | "google" | "github" | "microsoft" | "twitch";
 
@@ -25,6 +26,9 @@ export const useAuthStore = defineStore({
         default:
           break;
       }
+    },
+    signout() {
+      return axios.get(`/api/auth/signout`);
     },
   },
 });

@@ -1,17 +1,30 @@
 <template>
   <div class="page-wrapper">
     <button @click="test()">test</button>
+    <button @click="signout()">signout</button>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { useRouter } from "vue-router";
+
+import { useAuthStore } from "@/stores/auth.store";
 import { useUsersStore } from "@/stores/users.store";
 
+const router = useRouter();
+
 const usersStore = useUsersStore();
+const authStore = useAuthStore();
 
 function test() {
   usersStore.readAll().then((response: any) => {
     console.log(response);
+  });
+}
+function signout() {
+  authStore.signout().then((response: any) => {
+    console.log(response);
+    router.push({ name: "login" });
   });
 }
 </script>

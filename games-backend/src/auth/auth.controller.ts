@@ -1,7 +1,15 @@
-import { Controller, Get, Redirect, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  InternalServerErrorException,
+  Redirect,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { SteamAuthGuard, SteamRegGuard } from './steam.guard';
+import { IsAuthenticatedGuard } from './authenticated.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -43,5 +51,23 @@ export class AuthController {
     const hostname = isDev ? `${host}${port ? ':' : ''}${port}` : host;
 
     return { url: `${protocol}://${hostname}/` };
+  }
+
+  @Get('signout')
+  @UseGuards(IsAuthenticatedGuard)
+  async signout(@Req() request) {
+    const logoutError = await new Promise((resolve) =>
+      request.logOut({ keepSessionInfo: false }, (error) => resolve(error)),
+    );
+
+    if (logoutError) {
+      console.error(logoutError);
+
+      throw new InternalServerErrorException('Could not log out user');
+    }
+
+    return {
+      logout: true,
+    };
   }
 }
