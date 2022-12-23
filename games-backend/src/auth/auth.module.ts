@@ -22,7 +22,8 @@ import { UsersService } from 'src/users/users.service';
 export class AuthModule implements NestModule {
   constructor(private configService: ConfigService) {}
 
-  secure = this.configService.get('app.mode') !== 'development';
+  // secure = this.configService.get('app.mode') !== 'development';
+  secure = false;
   host = this.configService.get('database.host');
   port = +this.configService.get('database.port');
   user = this.configService.get('database.user');
