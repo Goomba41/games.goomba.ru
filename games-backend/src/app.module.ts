@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { PassportModule } from '@nestjs/passport';
+// import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -18,7 +18,7 @@ import { UsersModule } from './users/users.module';
   imports: [
     UsersModule,
     AuthModule,
-    PassportModule.register({ defaultStrategy: 'steam', session: true }),
+    // PassportModule.register({ session: true }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -38,6 +38,7 @@ import { UsersModule } from './users/users.module';
         DATABASE_NAME: Joi.string().required(),
         DATABASE_USER: Joi.string().required(),
         DATABASE_PASSWORD: Joi.string().required(),
+        SECRET_SESSION: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({

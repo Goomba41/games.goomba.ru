@@ -1,4 +1,5 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Session } from '@nestjs/common';
+import { Session as ExpressSession } from 'express-session';
 
 import User from './users.entity';
 
@@ -9,7 +10,8 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Get()
-  readAll(): Promise<User[]> {
+  readAll(@Session() session: ExpressSession): Promise<User[]> {
+    console.log(session);
     return this.usersService.readAll();
   }
 

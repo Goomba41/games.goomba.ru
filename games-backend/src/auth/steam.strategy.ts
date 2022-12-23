@@ -33,7 +33,7 @@ export class SteamStrategy extends PassportStrategy(Strategy, 'steamSignin') {
     if (signedin) {
       return done(null, profileJson);
     } else {
-      return done('error: need to sign up', null);
+      return done('User not found, need to sign up', null);
     }
   }
 }
@@ -72,5 +72,7 @@ export class SteamRegStrategy extends PassportStrategy(
     await this.usersService.create(profileJson).then(() => {
       return done(null, profileJson);
     });
+
+    return done('Unknown error', null);
   }
 }
