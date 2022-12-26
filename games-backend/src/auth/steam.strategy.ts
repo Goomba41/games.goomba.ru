@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 
@@ -25,15 +29,18 @@ export class SteamStrategy extends PassportStrategy(Strategy, 'steamSignin') {
     });
   }
 
-  async validate(identifier, profile, done) {
+  async validate(identifier, profile) {
     const profileJson = profile._json;
     const profileSteamId = profile._json.steamid;
 
     const signedin = await this.usersService.signin(profileSteamId);
     if (signedin) {
-      return done(null, profileJson);
+      return profileJson;
     } else {
-      return done('User not found, need to sign up', null);
+      throw new UnauthorizedException('Unauthorized', {
+        cause: new Error(), // https://nodejs.org/en/blog/release/v16.9.0/#error-cause
+        description: 'User is not registered, need to sign up',
+      });
     }
   }
 }
@@ -65,17 +72,21 @@ export class SteamRegStrategy extends PassportStrategy(
     const profileSteamId = profile._json.steamid;
 
     if (profile._json.communityvisibilitystate !== 3)
-      return done('Profile is not public', null);
+      // return done('Profile is not public', null);
+      throw new UnauthorizedException('Unauthorized', {
+        cause: new Error(), // https://nodejs.org/en/blog/release/v16.9.0/#error-cause
+        description: 'Profile is not public',
+      });
 
     const signedin = await this.usersService.signin(profileSteamId);
     if (signedin) {
-      return done(null, profileJson);
+      return profileJson;
     }
 
     await this.usersService.create(profileJson).then(() => {
-      return done(null, profileJson);
+      return profileJson;
     });
 
-    return done('Unknown error', null);
+    throw new HttpException('Internal server error', 500);
   }
 }
