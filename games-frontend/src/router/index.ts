@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth.store";
+import { useLoadingStore } from "@/stores/loading.store";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,6 +15,10 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: () => import("../pages/LoginPage.vue"),
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      redirect: { name: "home" },
     },
   ],
 });
@@ -42,6 +47,19 @@ router.beforeEach(async (to, from) => {
   if (authRequiredPage && (!auth.user || !auth.authenticated)) {
     return "/login";
   }
+});
+
+// Перед загрузкой страницы отметить старт загрузки маршрута
+router.beforeResolve((to, from, next) => {
+  if (to.name) {
+    useLoadingStore().toggle(true, "route");
+  }
+  next();
+});
+
+// После загрузки отметить завершение загрузки маршрута
+router.afterEach(() => {
+  useLoadingStore().toggle(false, "route");
 });
 
 export default router;

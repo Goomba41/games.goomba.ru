@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import axios from "axios";
+// import axios from "axios";
 
 import type { IUser } from "./users.store";
 
@@ -33,10 +33,10 @@ export const useAuthStore = defineStore({
       }
     },
     signout() {
-      return axios.get(`/api/auth/signout`);
+      return this.$axios.get(`/api/auth/signout`);
     },
     async sync() {
-      const state: any = await axios
+      const state: any = await this.$axios
         .get(`/api/auth/check`)
         .then((response: any) => response.data);
       if (state.authenticated) {

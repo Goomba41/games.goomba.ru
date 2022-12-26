@@ -64,6 +64,9 @@ export class SteamRegStrategy extends PassportStrategy(
     const profileJson = profile._json;
     const profileSteamId = profile._json.steamid;
 
+    if (profile._json.communityvisibilitystate !== 3)
+      return done('Profile is not public', null);
+
     const signedin = await this.usersService.signin(profileSteamId);
     if (signedin) {
       return done(null, profileJson);

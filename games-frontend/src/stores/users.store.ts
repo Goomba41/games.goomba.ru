@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import axios from "axios";
+// import axios from "axios";
 
 export interface IUser {
   steamid: string;
@@ -28,10 +28,10 @@ export const useUsersStore = defineStore({
   state: () => ({}),
   actions: {
     readAll() {
-      return axios.get(`/api/users`);
+      return this.$axios.get(`/api/users`);
     },
     readOne(id: string) {
-      return axios.get(`/api/users/${id}`);
+      return this.$axios.get(`/api/users/${id}`);
     },
   },
 });

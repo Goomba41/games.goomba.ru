@@ -1,7 +1,18 @@
 <template>
-  <div class="page-wrapper">
+  <div class="page-wrapper" v-if="!loadingStore.loading">
     <button @click="test()">test</button>
     <button @click="signout()">signout</button>
+    <textarea name="" id="" cols="30" rows="10" v-model="userJSON" />
+    <div
+      :class="[
+        authStore.user?.communityvisibilitystate === 3
+          ? 'tw-text-green-900'
+          : 'tw-text-red-900',
+        'profile-state',
+      ]"
+    >
+      {{ authStore.user?.communityvisibilitystate === 3 }}
+    </div>
   </div>
 </template>
 
@@ -10,11 +21,15 @@ import { useRouter } from "vue-router";
 
 import { useAuthStore } from "@/stores/auth.store";
 import { useUsersStore } from "@/stores/users.store";
+import { useLoadingStore } from "@/stores/loading.store";
 
 const router = useRouter();
 
-const usersStore = useUsersStore();
 const authStore = useAuthStore();
+const usersStore = useUsersStore();
+const loadingStore = useLoadingStore();
+
+const userJSON = JSON.stringify(authStore.user, undefined, 4);
 
 function test() {
   usersStore.readAll().then((response: any) => {

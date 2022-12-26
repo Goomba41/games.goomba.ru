@@ -2038,7 +2038,9 @@ __metadata:
     vgent: ^1.0.2
     vite: ^4.0.0
     vue: ^3.2.45
+    vue-axios: ^3.5.2
     vue-router: ^4.1.6
+    vue-toastification: next
     vue-tsc: ^1.0.12
   languageName: unknown
   linkType: soft
@@ -4254,6 +4256,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"vue-axios@npm:^3.5.2":
+  version: 3.5.2
+  resolution: "vue-axios@npm:3.5.2"
+  peerDependencies:
+    axios: "*"
+    vue: ^3.0.0 || ^2.0.0
+  checksum: c0b0251ba313fb6ae51e943a430c2806b6418cf9420faff5afce1f824c916047d6b39afb74f38287bbb46e2f76ba3e42ce29e1af88b3bb6f018f549a0fe3dc02
+  languageName: node
+  linkType: hard
+
 "vue-demi@npm:*":
   version: 0.13.11
   resolution: "vue-demi@npm:0.13.11"
@@ -4305,6 +4317,15 @@ __metadata:
     de-indent: ^1.0.2
     he: ^1.2.0
   checksum: eba9d2eed6b7110c963bc356b47bdd11d4023d25148abb7e5f7826db2fefe7ad8a575787ee0d8fa47701d44a6f54bde475279b1319f44e1049271eb2419f93a7
+  languageName: node
+  linkType: hard
+
+"vue-toastification@npm:next":
+  version: 2.0.0-rc.5
+  resolution: "vue-toastification@npm:2.0.0-rc.5"
+  peerDependencies:
+    vue: ^3.0.2
+  checksum: 358ac0eb8f40b1bbadc84c5a686d80c9fd7d6c37a3cec0c3a422f1157f4aa8a882e585404fe4efb7ac4ae52d627c65a30750b31425d7df1d6643f0c80ffcd668
   languageName: node
   linkType: hard
 

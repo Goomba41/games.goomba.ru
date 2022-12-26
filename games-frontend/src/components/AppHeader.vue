@@ -107,6 +107,27 @@ const headings: IHeading[] = [
     ],
     decoded: "Персональная Игровая Статистика",
   },
+  {
+    abbreviation: [
+      {
+        char: "П",
+        type: "common",
+      },
+      {
+        char: "И",
+        type: "common",
+      },
+      {
+        char: "З",
+        type: "common",
+      },
+      {
+        char: "Д",
+        type: "common",
+      },
+    ],
+    decoded: "Прохождение Игр За Достижения",
+  },
 ];
 
 let currentHeading: Ref<IHeading> = ref(getRandomHeading());
