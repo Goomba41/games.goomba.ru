@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { DateTime as luxon } from 'luxon';
@@ -45,7 +45,8 @@ export class UsersService {
   }
 
   readAll(): Promise<User[]> {
-    return this.usersRepository.find();
+    // return this.usersRepository.find();
+    throw new HttpException('Internal server error', 500).stack;
   }
 
   async delete(steamid: string): Promise<DeleteResult> {
