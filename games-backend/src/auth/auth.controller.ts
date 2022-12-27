@@ -58,7 +58,6 @@ export class AuthController {
   @UseGuards(IsAuthenticatedGuard)
   async signout(@Req() request) {
     const logoutError = await new Promise((resolve) => {
-      console.log(request.sessionID);
       request.logOut({ keepSessionInfo: false }, (error) => resolve(error));
     });
 

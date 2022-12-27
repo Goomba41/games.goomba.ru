@@ -14,7 +14,6 @@ export class UsersController {
   @UseGuards(IsAuthenticatedGuard)
   @Get()
   readAll(@Session() session: ExpressSession): Promise<User[]> {
-    console.log(session);
     return this.usersService.readAll();
   }
 

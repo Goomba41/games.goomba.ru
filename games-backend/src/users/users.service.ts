@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { DateTime as luxon } from 'luxon';
@@ -35,8 +35,11 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
+  private readonly logger = new Logger(UsersService.name);
+
   create(steamProfile: ISteamProfile): Promise<User> {
     const newUser = this.usersRepository.create(steamProfile);
+    this.logger.log(`User with steamid ${steamProfile.steamid} is created`);
     return this.usersRepository.save(newUser);
   }
 
@@ -46,7 +49,12 @@ export class UsersService {
 
   readAll(): Promise<User[]> {
     // return this.usersRepository.find();
-    throw new HttpException('Internal server error', 500).stack;
+    this.logger.log(`Read all users`);
+    const stack = new HttpException('', 500).stack;
+    throw new HttpException('Internal server error', 500, {
+      cause: new Error(), // https://nodejs.org/en/blog/release/v16.9.0/#error-cause
+      description: stack,
+    });
   }
 
   async delete(steamid: string): Promise<DeleteResult> {
