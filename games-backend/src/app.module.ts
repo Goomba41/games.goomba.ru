@@ -15,7 +15,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 
 import { LoggerModule } from './logger/logger.module';
-// import LoggerMiddleware from './logger/logger.middleware';
+import LoggerMiddleware from './logger/logger.middleware';
 
 @Module({
   imports: [

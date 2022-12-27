@@ -48,7 +48,12 @@ export default class CustomLogger extends ConsoleLogger {
     });
   }
 
-  warn(message: string, context?: string, id?: string) {
+  warn(
+    message: string,
+    stack?: string,
+    context?: string,
+    id: string = undefined,
+  ) {
     super.warn.apply(this, [message, context]);
 
     this.logsService.createLog({

@@ -67,8 +67,6 @@ export class AuthController {
     });
 
     if (logoutError) {
-      console.error(logoutError);
-
       throw new InternalServerErrorException(`Could not log out user ${user}`);
     }
 

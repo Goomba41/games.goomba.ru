@@ -1,5 +1,4 @@
-import { Controller, Get, Param, Session, UseGuards } from '@nestjs/common';
-import { Session as ExpressSession } from 'express-session';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 
 import { IsAuthenticatedGuard } from 'src/auth/authenticated.guard';
 
@@ -13,7 +12,7 @@ export class UsersController {
 
   @UseGuards(IsAuthenticatedGuard)
   @Get()
-  readAll(@Session() session: ExpressSession): Promise<User[]> {
+  readAll(): Promise<User[]> {
     return this.usersService.readAll();
   }
 

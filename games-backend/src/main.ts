@@ -11,7 +11,6 @@ async function bootstrap() {
   });
 
   const configService = app.get(ConfigService);
-  const { httpAdapter } = app.get(HttpAdapterHost);
 
   const port = configService.get('APP_PORT_BACK');
 
