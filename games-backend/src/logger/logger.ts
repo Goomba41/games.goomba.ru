@@ -33,21 +33,26 @@ export default class CustomLogger extends ConsoleLogger {
       });
   }
 
-  error(message: string, stack?: string, context?: string) {
+  error(message: string, stack?: string, context?: string, id?: string) {
     super.error.apply(this, [message, stack, context]);
 
+    const messageSubstrings: string[] = message.split(' ');
+    messageSubstrings.shift();
+
     this.logsService.createLog({
-      message,
+      id,
+      message: messageSubstrings.join(' '),
       stack,
       context,
       level: 'error',
     });
   }
 
-  warn(message: string, context?: string) {
+  warn(message: string, context?: string, id?: string) {
     super.warn.apply(this, [message, context]);
 
     this.logsService.createLog({
+      id,
       message,
       context,
       level: 'warn',

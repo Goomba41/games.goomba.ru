@@ -77,7 +77,7 @@ axios.interceptors.request.use(
     const title: string = `${error.response!.status} - ${
       error.response!.statusText
     }`;
-    const body: string = error.message;
+    // const body: string = error.message;
 
     toast.error(title);
 
@@ -119,7 +119,7 @@ axios.interceptors.response.use(
     if (responseType && responseType === "application/json") {
       // Иначе преобразуем в JSON, если это ArrayBuffer и отдадим дальше
       if (response.data instanceof ArrayBuffer) {
-        return JSON.parse(new TextDecoder().decode(response));
+        return JSON.parse(new TextDecoder().decode(response.data));
       }
       return response;
     }
@@ -128,14 +128,17 @@ axios.interceptors.response.use(
     const authStore = useAuthStore();
     const loadingStore = useLoadingStore();
 
-    const title: string = `${error.response!.status} - ${
-      error.response!.statusText
-    }`;
+    const errResponse: any = error.response!.data;
+
+    const title: string = `${errResponse!.statusCode} - ${
+      errResponse!.message
+    } (TraceId: ${errResponse!.traceId})`;
+
     let body: string = error.message;
 
     if (
-      (error.response && error.response.status === 401) ||
-      error.response.status === 403
+      error.response &&
+      (error.response.status === 401 || error.response.status === 403)
     ) {
       authStore.signout();
       body = "Сессия истекла, необходимо войти заново!";

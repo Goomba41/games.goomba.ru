@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -13,7 +13,9 @@ import scrConf from './config/secrets.config';
 
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+
 import { LoggerModule } from './logger/logger.module';
+// import LoggerMiddleware from './logger/logger.middleware';
 
 @Module({
   imports: [
@@ -60,4 +62,8 @@ import { LoggerModule } from './logger/logger.module';
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}
+
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(LoggerMiddleware).forRoutes('*');
+  // }
 }

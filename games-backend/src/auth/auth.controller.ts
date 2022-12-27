@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   InternalServerErrorException,
+  Logger,
   Redirect,
   Req,
   Session,
@@ -15,6 +16,8 @@ import { IsAuthenticatedGuard } from './authenticated.guard';
 @Controller('auth')
 export class AuthController {
   constructor(private configService: ConfigService) {}
+
+  private readonly logger = new Logger(AuthController.name);
 
   @Get('steam/signin')
   @UseGuards(SteamAuthGuard)
@@ -57,6 +60,8 @@ export class AuthController {
   @Get('signout')
   @UseGuards(IsAuthenticatedGuard)
   async signout(@Req() request) {
+    const user: string = request.session.passport.user.steamid;
+
     const logoutError = await new Promise((resolve) => {
       request.logOut({ keepSessionInfo: false }, (error) => resolve(error));
     });
@@ -64,8 +69,10 @@ export class AuthController {
     if (logoutError) {
       console.error(logoutError);
 
-      throw new InternalServerErrorException('Could not log out user');
+      throw new InternalServerErrorException(`Could not log out user ${user}`);
     }
+
+    this.logger.log(`User ${user} is sign out`);
 
     return {
       logout: true,
