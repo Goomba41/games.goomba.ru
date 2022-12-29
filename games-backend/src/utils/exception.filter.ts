@@ -69,6 +69,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const authErrorsCodes: number[] = [401, 403];
 
     if (authErrorsCodes.includes(httpStatus)) {
+      response.cookie('Unauthorized', 404);
       response.redirect(303, this.strategy.failureRedirect);
       //   httpAdapter.redirect(response, 302, this.strategy.failureRedirect);
     } else {

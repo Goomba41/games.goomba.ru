@@ -65,9 +65,27 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from "@/stores/auth.store";
+import type { VueCookies } from "vue-cookies";
+import { useToast } from "vue-toastification";
 
+import { useAuthStore } from "@/stores/auth.store";
+import { inject } from "vue";
+
+const toast = useToast();
 const authStore = useAuthStore();
+
+const $cookies = inject<VueCookies>("$cookies");
+
+const key: string = "Unauthorized";
+
+if ($cookies && $cookies.isKey(key)) {
+  const value = $cookies!.get(key);
+  console.log(value);
+
+  toast.warning("Пользователь не найден в системе, пройдите регистрацию");
+
+  $cookies!.remove("Unauthorized");
+}
 </script>
 
 <style lang="scss" scoped>

@@ -2039,6 +2039,7 @@ __metadata:
     vite: ^4.0.0
     vue: ^3.2.45
     vue-axios: ^3.5.2
+    vue-cookies: ^1.8.2
     vue-router: ^4.1.6
     vue-toastification: next
     vue-tsc: ^1.0.12
@@ -4263,6 +4264,13 @@ __metadata:
     axios: "*"
     vue: ^3.0.0 || ^2.0.0
   checksum: c0b0251ba313fb6ae51e943a430c2806b6418cf9420faff5afce1f824c916047d6b39afb74f38287bbb46e2f76ba3e42ce29e1af88b3bb6f018f549a0fe3dc02
+  languageName: node
+  linkType: hard
+
+"vue-cookies@npm:^1.8.2":
+  version: 1.8.2
+  resolution: "vue-cookies@npm:1.8.2"
+  checksum: 467d4007829715b7de1930bb75f10bbf67393b84aa7e7cab51824623455448a3bbbb3d2b37a15d4d350dd526aa1fc72a04e35a5a9b435ae9cc8aef75e54d6770
   languageName: node
   linkType: hard
 

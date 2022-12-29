@@ -2,6 +2,7 @@ import { createApp, markRaw } from "vue";
 import { createPinia } from "pinia";
 
 import Toast, { type PluginOptions, POSITION } from "vue-toastification";
+import VueCookies from "vue-cookies";
 
 /* import the fontawesome core */
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -69,6 +70,7 @@ app.use(VueAxios, axios);
 app.use(Toast, options);
 app.use(pinia);
 app.use(router);
+app.use(VueCookies);
 
 app.provide("axios", app.config.globalProperties.axios);
 
