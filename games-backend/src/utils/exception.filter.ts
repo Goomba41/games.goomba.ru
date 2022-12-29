@@ -9,10 +9,14 @@ import {
 import { HttpAdapterHost } from '@nestjs/core';
 
 import { randomUUID } from 'crypto';
+import { SteamStrategy } from 'src/auth/steam.strategy';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+  constructor(
+    private readonly httpAdapterHost: HttpAdapterHost,
+    private readonly strategy: SteamStrategy,
+  ) {}
 
   private readonly logger = new Logger('HttpException');
 
@@ -22,6 +26,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const { httpAdapter } = this.httpAdapterHost;
 
     const ctx = host.switchToHttp();
+
+    const response = ctx.getResponse();
 
     const httpStatus =
       exception instanceof HttpException
@@ -60,6 +66,13 @@ export class AllExceptionsFilter implements ExceptionFilter {
       traceId,
     };
 
-    httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
+    const authErrorsCodes: number[] = [401, 403];
+
+    if (authErrorsCodes.includes(httpStatus)) {
+      response.redirect(303, this.strategy.failureRedirect);
+      //   httpAdapter.redirect(response, 302, this.strategy.failureRedirect);
+    } else {
+      httpAdapter.reply(response, responseBody, httpStatus);
+    }
   }
 }

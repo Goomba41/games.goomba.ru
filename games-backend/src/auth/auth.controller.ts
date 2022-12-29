@@ -79,15 +79,19 @@ export class AuthController {
 
   @Get('check')
   async state(@Session() session, @Req() request) {
-    if (request.isAuthenticated()) {
-      return {
-        authenticated: request.isAuthenticated(),
-        user: request.session.passport.user,
-      };
-    }
+    // if (request.isAuthenticated()) {
+    //   return {
+    //     authenticated: request.isAuthenticated(),
+    //     user: request.session.passport.user,
+    //   };
+    // }
+    // return {
+    //   authenticated: request.isAuthenticated(),
+    //   user: null,
+    // };
     return {
       authenticated: request.isAuthenticated(),
-      user: null,
+      user: request.session.passport?.user || null,
     };
   }
 }

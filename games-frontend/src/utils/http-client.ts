@@ -6,12 +6,15 @@ import axios, {
 // Needed for file saver
 // import FileSaver from "file-saver";
 
+import { useRouter } from "vue-router";
+
 import { useAuthStore } from "@/stores/auth.store";
 import { useLoadingStore } from "@/stores/loading.store";
 
 import { useToast } from "vue-toastification";
 
 const toast = useToast();
+const router = useRouter();
 
 // import toast from "./toast";
 
@@ -134,14 +137,16 @@ axios.interceptors.response.use(
       errResponse!.message
     } (TraceId: ${errResponse!.traceId})`;
 
-    let body: string = error.message;
+    const authErrorsCodes: number[] = [401, 403];
 
-    if (
-      error.response &&
-      (error.response.status === 401 || error.response.status === 403)
-    ) {
-      authStore.signout();
-      body = "Сессия истекла, необходимо войти заново!";
+    if (error.response && authErrorsCodes.includes(error.response.status)) {
+      authStore.signout().then((response: any) => {
+        console.log(response);
+        if (authErrorsCodes.includes(response.data.StatusCode)) {
+          toast.error("Сессия истекла, необходимо войти заново!");
+          router.push({ name: "login" });
+        }
+      });
     }
 
     toast.error(title);

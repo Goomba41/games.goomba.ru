@@ -12,6 +12,8 @@ class LoggerMiddleware implements NestMiddleware {
 
       const message = `${method} ${originalUrl} ${statusCode} ${statusMessage}`;
 
+      console.log(`MMMMMMMMMMMMMMMSSSSSSSGGGGGG ${message}`);
+
       //   if (statusCode >= 500) {
       //     return this.logger.error(message);
       //   }

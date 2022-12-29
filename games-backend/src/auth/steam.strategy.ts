@@ -14,15 +14,20 @@ export class SteamStrategy extends PassportStrategy(Strategy, 'steamSignin') {
   ) {
     const isDev = configService.get<string>('app.mode') === 'development';
     const host = configService.get<string>('app.host');
-    const port = configService.get<string>('app.portB');
+    const portB = configService.get<string>('app.portB');
+    const portF = configService.get<string>('app.portF');
     const protocol = configService.get<string>('app.protocol');
-    const hostname = isDev ? `${host}:${port}` : host;
+    const hostnameB = isDev ? `${host}:${portB}` : host;
+    const hostnameF = isDev ? `${host}:${portF}` : host;
 
     super({
-      returnURL: `${protocol}://${hostname}/api/auth/steam/signin/success`,
-      realm: `${protocol}://${hostname}/`,
+      returnURL: `${protocol}://${hostnameB}/api/auth/steam/signin/success`,
+      realm: `${protocol}://${hostnameB}/`,
       apiKey: configService.get<string>('tokens.steam'),
     });
+
+    this.successRedirect = `${protocol}://${hostnameF}/`;
+    this.failureRedirect = `${protocol}://${hostnameF}/login`;
   }
 
   async validate(identifier, profile) {
@@ -38,6 +43,9 @@ export class SteamStrategy extends PassportStrategy(Strategy, 'steamSignin') {
       );
     }
   }
+
+  public successRedirect: string;
+  public failureRedirect: string;
 }
 
 @Injectable()
