@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 
@@ -14,28 +14,38 @@ export class SteamStrategy extends PassportStrategy(Strategy, "steamSignin") {
   ) {
     const isDev = configService.get<string>("app.mode") === "development";
     const host = configService.get<string>("app.host");
-    const port = configService.get<string>("app.portB");
+    const portB = configService.get<string>("app.portB");
+    const portF = configService.get<string>("app.portF");
     const protocol = configService.get<string>("app.protocol");
-    const hostname = isDev ? `${host}:${port}` : host;
+    const hostnameB = isDev ? `${host}:${portB}` : host;
+    const hostnameF = isDev ? `${host}:${portF}` : host;
 
     super({
-      returnURL: `${protocol}://${hostname}/api/auth/steam/signin/success`,
-      realm: `${protocol}://${hostname}/`,
+      returnURL: `${protocol}://${hostnameB}/api/auth/steam/signin/success`,
+      realm: `${protocol}://${hostnameB}/`,
       apiKey: configService.get<string>("tokens.steam"),
     });
+
+    this.successRedirect = `${protocol}://${hostnameF}/`;
+    this.failureRedirect = `${protocol}://${hostnameF}/login`;
   }
 
-  async validate(identifier, profile, done) {
+  async validate(identifier, profile) {
     const profileJson = profile._json;
     const profileSteamId = profile._json.steamid;
 
     const signedin = await this.usersService.signin(profileSteamId);
     if (signedin) {
-      return done(null, profileJson);
+      return profileJson;
     } else {
-      return done("error: need to sign up", null);
+      throw new UnauthorizedException(
+        "User is not registered, need to sign up"
+      );
     }
   }
+
+  public successRedirect: string;
+  public failureRedirect: string;
 }
 
 @Injectable()
@@ -64,13 +74,16 @@ export class SteamRegStrategy extends PassportStrategy(
     const profileJson = profile._json;
     const profileSteamId = profile._json.steamid;
 
-    const signedin = await this.usersService.signin(profileSteamId);
-    if (signedin) {
-      return done(null, profileJson);
+    if (profile._json.communityvisibilitystate !== 3) {
+      throw new UnauthorizedException("Profile is not public");
+    } else {
+      const signedin = await this.usersService.signin(profileSteamId);
+      if (signedin) {
+        return profileJson;
+      } else {
+        await this.usersService.create(profileJson);
+        return profileJson;
+      }
     }
-
-    await this.usersService.create(profileJson).then(() => {
-      return done(null, profileJson);
-    });
   }
 }

@@ -1,11 +1,23 @@
-import { Controller, Get, Redirect, UseGuards, Request } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  InternalServerErrorException,
+  Logger,
+  Redirect,
+  Req,
+  Session,
+  UseGuards,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 import { SteamAuthGuard, SteamRegGuard } from "./steam.guard";
+import { IsAuthenticatedGuard } from "./authenticated.guard";
 
 @Controller("auth")
 export class AuthController {
   constructor(private configService: ConfigService) {}
+
+  private readonly logger = new Logger(AuthController.name);
 
   @Get("steam/signin")
   @UseGuards(SteamAuthGuard)
@@ -47,5 +59,43 @@ export class AuthController {
     const hostname = isDev ? `${host}${port ? ":" : ""}${port}` : host;
 
     return { url: `${protocol}://${hostname}/` };
+  }
+
+  @Get("signout")
+  @UseGuards(IsAuthenticatedGuard)
+  async signout(@Req() request) {
+    const user: string = request.session.passport.user.steamid;
+
+    const logoutError = await new Promise((resolve) => {
+      request.logOut({ keepSessionInfo: false }, (error) => resolve(error));
+    });
+
+    if (logoutError) {
+      throw new InternalServerErrorException(`Could not log out user ${user}`);
+    }
+
+    this.logger.log(`User ${user} is sign out`);
+
+    return {
+      logout: true,
+    };
+  }
+
+  @Get("check")
+  async state(@Session() session, @Req() request) {
+    // if (request.isAuthenticated()) {
+    //   return {
+    //     authenticated: request.isAuthenticated(),
+    //     user: request.session.passport.user,
+    //   };
+    // }
+    // return {
+    //   authenticated: request.isAuthenticated(),
+    //   user: null,
+    // };
+    return {
+      authenticated: request.isAuthenticated(),
+      user: request.session.passport?.user || null,
+    };
   }
 }

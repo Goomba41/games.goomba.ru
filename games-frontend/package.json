@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0",
     "build": "run-p type-check build-only",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -20,7 +20,10 @@
     "axios": "^1.2.1",
     "pinia": "^2.0.28",
     "vue": "^3.2.45",
-    "vue-router": "^4.1.6"
+    "vue-axios": "^3.5.2",
+    "vue-cookies": "^1.8.2",
+    "vue-router": "^4.1.6",
+    "vue-toastification": "next"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",

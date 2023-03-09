@@ -1,6 +1,5 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 
-import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -10,19 +9,23 @@ import { DataSource } from 'typeorm';
 import dbConf from './config/database.config';
 import tknConf from './config/tokens.config';
 import appConf from './config/app.config';
+import scrConf from './config/secrets.config';
 
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+
+import { LoggerModule } from './logger/logger.module';
+import LoggerMiddleware from './logger/logger.middleware';
 
 @Module({
   imports: [
     UsersModule,
     AuthModule,
-    PassportModule.register({ defaultStrategy: 'steam', session: true }),
+    LoggerModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      load: [dbConf, tknConf, appConf],
+      load: [dbConf, tknConf, appConf, scrConf],
       validationSchema: Joi.object({
         APP_MODE: Joi.string()
           .valid('development', 'production')
@@ -38,6 +41,7 @@ import { UsersModule } from './users/users.module';
         DATABASE_NAME: Joi.string().required(),
         DATABASE_USER: Joi.string().required(),
         DATABASE_PASSWORD: Joi.string().required(),
+        SECRET_SESSION: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRootAsync({
@@ -51,11 +55,15 @@ import { UsersModule } from './users/users.module';
         password: configService.get('DATABASE_PASSWORD'),
         database: configService.get('DATABASE_NAME'),
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: configService.get('APP_MODE') === 'development',
       }),
     }),
   ],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}
+
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(LoggerMiddleware).forRoutes('*');
+  // }
 }
