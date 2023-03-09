@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 
-import { DateTime as luxon } from 'luxon';
-import { DeleteResult, Repository } from 'typeorm';
+import { DateTime as luxon } from "luxon";
+import { DeleteResult, Repository } from "typeorm";
 
-import User from './users.entity';
+import User from "./users.entity";
 
 interface ISteamProfile {
   steamid: string;
@@ -32,7 +32,7 @@ interface ISteamProfile {
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private usersRepository: Repository<User>
   ) {}
 
   create(steamProfile: ISteamProfile): Promise<User> {

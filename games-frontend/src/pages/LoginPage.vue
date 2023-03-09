@@ -91,9 +91,7 @@ const authStore = useAuthStore();
 
   .providers-wrapper {
     grid-template-columns: repeat(auto-fill, 5rem);
-    @apply tw-px-6 tw-grid tw-auto-cols-max tw-grid-flow-row
-      tw-gap-2 tw-place-content-center
-      max-[480px]:tw-w-full min-[480px]:tw-max-w-[480px];
+    @apply tw-px-6 tw-grid tw-auto-cols-max tw-grid-flow-row tw-gap-2 tw-place-content-center max-[480px]: tw-w-full min-[480px]:tw-max-w-[480px];
     // tw-justify-center tw-flex tw-flex-row tw-flex-wrap tw-grid-cols-4;
   }
 
@@ -116,6 +114,7 @@ const authStore = useAuthStore();
         );
       }
     }
+
     &.google {
       background: linear-gradient(90deg, #dd4b39 0%, #902113 100%);
 
@@ -123,6 +122,7 @@ const authStore = useAuthStore();
         background: linear-gradient(90deg, #dd4b39 30%, #902113 100%);
       }
     }
+
     &.github {
       background: linear-gradient(90deg, #999999 0%, #211111 100%);
 
@@ -130,6 +130,7 @@ const authStore = useAuthStore();
         background: linear-gradient(90deg, #999999 30%, #211111 100%);
       }
     }
+
     &.microsoft {
       background: linear-gradient(90deg, #f65314 0%, #a03207 100%);
 
@@ -137,6 +138,7 @@ const authStore = useAuthStore();
         background: linear-gradient(90deg, #f65314 30%, #a03207 100%);
       }
     }
+
     &.twitch {
       background: linear-gradient(90deg, #9146ff 0%, #5017a6 100%);
 
