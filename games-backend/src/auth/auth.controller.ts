@@ -34,7 +34,7 @@ export class AuthController {
   @Get("steam/signin/success")
   @Redirect()
   @UseGuards(SteamAuthGuard)
-  async steamSignin(@Request() req) {
+  async steamSignin(@Req() req) {
     const isDev = this.configService.get<string>("app.mode") === "development";
     const host = this.configService.get<string>("app.host");
     const port = this.configService.get<string>("app.portF");
