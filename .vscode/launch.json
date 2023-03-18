@@ -1,0 +1,40 @@
+{
+  // Используйте IntelliSense, чтобы узнать о возможных атрибутах.
+  // Наведите указатель мыши, чтобы просмотреть описания существующих атрибутов.
+  // Для получения дополнительной информации посетите: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Nest",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": [
+        "run",
+        "start:debug",
+        "--",
+        "--inspect-brk",
+        "-r",
+        "ts-node/register"
+      ],
+      "console": "integratedTerminal",
+      "restart": true,
+      "sourceMaps": true,
+      "stopOnEntry": true,
+      "autoAttachChildProcesses": true,
+      "localRoot": "${workspaceFolder}\\games-backend"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "runtimeExecutable": "C:\\Users\\CDS\\AppData\\Local\\Vivaldi\\Application\\vivaldi.exe",
+      "name": "Launch Vue",
+      "preLaunchTask": "vuejs: start",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}\\games-frontend\\src",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*"
+      }
+    }
+  ]
+}
