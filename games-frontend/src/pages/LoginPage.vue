@@ -2,7 +2,7 @@
   <div class="page-wrapper">
     <h1 class="tw-mt-auto">Войти</h1>
     <div class="providers-wrapper">
-      <button class="provider-button steam" @click="authStore.signin()">
+      <button class="provider-button steam" @click="authStore.signIn()">
         <awesome-icon
           class="provider-button__icon"
           icon="fa-brands fa-steam"
@@ -12,7 +12,7 @@
       <button
         class="provider-button google"
         disabled
-        @click="authStore.signin('google')"
+        @click="authStore.signIn('google')"
       >
         <awesome-icon
           class="provider-button__icon"
@@ -23,7 +23,7 @@
       <button
         class="provider-button github"
         disabled
-        @click="authStore.signin('github')"
+        @click="authStore.signIn('github')"
       >
         <awesome-icon
           class="provider-button__icon"
@@ -34,7 +34,7 @@
       <button
         class="provider-button microsoft"
         disabled
-        @click="authStore.signin('microsoft')"
+        @click="authStore.signIn('microsoft')"
       >
         <awesome-icon
           class="provider-button__icon"
@@ -45,7 +45,7 @@
       <button
         class="provider-button twitch"
         disabled
-        @click="authStore.signin('twitch')"
+        @click="authStore.signIn('twitch')"
       >
         <awesome-icon
           class="provider-button__icon"
@@ -56,7 +56,7 @@
     </div>
     <h3 class="tw-pt-12 tw-pb-6">или зарегистрироваться</h3>
     <button
-      @click="authStore.signup()"
+      @click="authStore.signUp()"
       class="provider-button register-button tw-mb-auto"
     >
       <awesome-icon icon="fa-brands fa-steam" fixed-width />
@@ -109,7 +109,7 @@ if ($cookies && $cookies.isKey(key)) {
 
   .providers-wrapper {
     grid-template-columns: repeat(auto-fill, 5rem);
-    @apply tw-px-6 tw-grid tw-auto-cols-max tw-grid-flow-row tw-gap-2 tw-place-content-center max-[480px]: tw-w-full min-[480px]:tw-max-w-[480px];
+    @apply tw-px-6 tw-grid tw-auto-cols-max tw-grid-flow-row tw-gap-2 tw-place-content-center max-[480px]:tw-w-full min-[480px]:tw-max-w-[480px];
     // tw-justify-center tw-flex tw-flex-row tw-flex-wrap tw-grid-cols-4;
   }
 

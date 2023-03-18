@@ -1,12 +1,11 @@
 import {
-  HttpException,
   Injectable,
   InternalServerErrorException,
   Logger,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
-import { DateTime as luxon } from "luxon";
+import { DateTime as dt } from "luxon";
 import { DeleteResult, Repository } from "typeorm";
 
 import User from "./users.entity";
@@ -43,13 +42,14 @@ export class UsersService {
   private readonly logger = new Logger(UsersService.name);
 
   create(steamProfile: ISteamProfile): Promise<User> {
-    const newUser = this.usersRepository.create(steamProfile);
-    this.logger.log(`User with steamid ${steamProfile.steamid} is created`);
+    const steamId = steamProfile.steamid;
+    const newUser = this.usersRepository.create({ steamId });
+    this.logger.log(`User with steam id ${steamId} is created`);
     return this.usersRepository.save(newUser);
   }
 
-  readOne(steamid: string): Promise<User> {
-    return this.usersRepository.findOneBy({ steamid });
+  readOne(steamId: string): Promise<User> {
+    return this.usersRepository.findOneBy({ steamId });
   }
 
   readAll(): Promise<User[]> {
@@ -57,17 +57,17 @@ export class UsersService {
     throw new InternalServerErrorException();
   }
 
-  async delete(steamid: string): Promise<DeleteResult> {
-    return await this.usersRepository.delete(steamid);
+  async delete(steamId: string): Promise<DeleteResult> {
+    return await this.usersRepository.delete(steamId);
   }
 
-  async signin(steamid: string): Promise<boolean> {
+  async signIn(steamId: string): Promise<boolean> {
     const existedUser = await this.usersRepository.findOneBy({
-      steamid,
+      steamId,
     });
 
     if (existedUser) {
-      existedUser.signin = luxon.now().toJSDate();
+      existedUser.signIn = dt.now().toJSDate();
       this.usersRepository.save(existedUser);
       return true;
     }

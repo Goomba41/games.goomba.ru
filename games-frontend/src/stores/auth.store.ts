@@ -12,28 +12,28 @@ export const useAuthStore = defineStore({
     authenticated: false as boolean,
   }),
   actions: {
-    signin(provider: TProviders = "steam") {
+    signIn(provider: TProviders = "steam") {
       switch (provider) {
         case "steam":
-          window.location.href = `/api/auth/${provider}/signin`;
+          window.location.href = `/api/auth/${provider}/sign-in`;
           break;
 
         default:
           break;
       }
     },
-    signup(provider: "steam" = "steam") {
+    signUp(provider: "steam" = "steam") {
       switch (provider) {
         case "steam":
-          window.location.href = `/api/auth/${provider}/signup`;
+          window.location.href = `/api/auth/${provider}/sign-up`;
           break;
 
         default:
           break;
       }
     },
-    signout() {
-      return this.$axios.get(`/api/auth/signout`);
+    signOut() {
+      return this.$axios.get(`/api/auth/sign-out`);
     },
     async sync() {
       const state: any = await this.$axios

@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrapper" v-if="!loadingStore.loading">
     <button @click="test()">test</button>
-    <button @click="signout()">signout</button>
+    <button @click="signOut()">sign out</button>
     <textarea name="" id="" cols="30" rows="10" v-model="userJSON" />
     <div
       :class="[
@@ -36,8 +36,8 @@ function test() {
     console.log(response);
   });
 }
-function signout() {
-  authStore.signout().then(async (response: any) => {
+function signOut() {
+  authStore.signOut().then(async (response: any) => {
     console.log(response);
     await authStore.sync();
     router.push({ name: "login" });

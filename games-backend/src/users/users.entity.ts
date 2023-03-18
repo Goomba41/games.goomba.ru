@@ -3,13 +3,13 @@ import { CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
 @Entity({ name: "users", schema: "games" })
 export default class User {
   @PrimaryColumn({ unique: true, comment: "SteamId для использования в API" })
-  steamid: string;
+  steamId: string;
 
   @CreateDateColumn({
     comment: "Дата регистрации",
   })
-  signup: Date;
+  signUp: Date;
 
   @CreateDateColumn({ comment: "Дата последнего входа" })
-  signin: Date;
+  signIn: Date;
 }

@@ -1,12 +1,12 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from "@nestjs/common";
 
-import { IsAuthenticatedGuard } from 'src/auth/authenticated.guard';
+import { IsAuthenticatedGuard } from "src/auth/authenticated.guard";
 
-import User from './users.entity';
+import User from "./users.entity";
 
-import { UsersService } from './users.service';
+import { UsersService } from "./users.service";
 
-@Controller('users')
+@Controller("users")
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
@@ -17,7 +17,7 @@ export class UsersController {
   }
 
   @UseGuards(IsAuthenticatedGuard)
-  @Get(':id')
+  @Get(":id")
   readOne(@Param() params): Promise<User> {
     return this.usersService.readOne(params.id);
   }

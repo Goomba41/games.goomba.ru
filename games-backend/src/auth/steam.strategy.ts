@@ -7,7 +7,7 @@ import { Strategy } from "passport-steam";
 import { UsersService } from "src/users/users.service";
 
 @Injectable()
-export class SteamStrategy extends PassportStrategy(Strategy, "steamSignin") {
+export class SteamStrategy extends PassportStrategy(Strategy, "steamSignIn") {
   constructor(
     private configService: ConfigService,
     private usersService: UsersService
@@ -21,7 +21,7 @@ export class SteamStrategy extends PassportStrategy(Strategy, "steamSignin") {
     const hostnameF = isDev ? `${host}:${portF}` : host;
 
     super({
-      returnURL: `${protocol}://${hostnameB}/api/auth/steam/signin/success`,
+      returnURL: `${protocol}://${hostnameB}/api/auth/steam/sign-in/success`,
       realm: `${protocol}://${hostnameB}/`,
       apiKey: configService.get<string>("tokens.steam"),
     });
@@ -34,8 +34,8 @@ export class SteamStrategy extends PassportStrategy(Strategy, "steamSignin") {
     const profileJson = profile._json;
     const profileSteamId = profile._json.steamid;
 
-    const signedin = await this.usersService.signin(profileSteamId);
-    if (signedin) {
+    const signedIn = await this.usersService.signIn(profileSteamId);
+    if (signedIn) {
       return profileJson;
     } else {
       throw new UnauthorizedException(
@@ -64,7 +64,7 @@ export class SteamRegStrategy extends PassportStrategy(
     const hostname = isDev ? `${host}:${port}` : host;
 
     super({
-      returnURL: `${protocol}://${hostname}/api/auth/steam/signup/success`,
+      returnURL: `${protocol}://${hostname}/api/auth/steam/sign-up/success`,
       realm: `${protocol}://${hostname}/`,
       apiKey: configService.get<string>("tokens.steam"),
     });
@@ -77,8 +77,8 @@ export class SteamRegStrategy extends PassportStrategy(
     if (profile._json.communityvisibilitystate !== 3) {
       throw new UnauthorizedException("Profile is not public");
     } else {
-      const signedin = await this.usersService.signin(profileSteamId);
-      if (signedin) {
+      const signedIn = await this.usersService.signIn(profileSteamId);
+      if (signedIn) {
         return profileJson;
       } else {
         await this.usersService.create(profileJson);

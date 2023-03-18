@@ -19,36 +19,32 @@ export class AuthController {
 
   private readonly logger = new Logger(AuthController.name);
 
-  @Get("steam/signin")
+  @Get("steam/sign-in")
   @UseGuards(SteamAuthGuard)
-  async signin() {
+  async signIn() {
     // call redirect to steam login page
   }
 
-  @Get("steam/signup")
+  @Get("steam/sign-up")
   @UseGuards(SteamRegGuard)
-  async signup() {
+  async signUp() {
     // call redirect to steam login page
   }
 
-  @Get("steam/signin/success")
+  @Get("steam/sign-in/success")
   @Redirect()
   @UseGuards(SteamAuthGuard)
-  async steamSignin(@Req() req) {
+  async steamSignIn() {
     const isDev = this.configService.get<string>("app.mode") === "development";
     const host = this.configService.get<string>("app.host");
     const port = this.configService.get<string>("app.portF");
     const protocol = this.configService.get<string>("app.protocol");
     const hostname = isDev ? `${host}${port ? ":" : ""}${port}` : host;
 
-    console.log(req.user);
-    console.log(req.isAuthenticated());
-    console.log(req.isUnauthenticated());
-
     return { url: `${protocol}://${hostname}/`, statusCode: 301 };
   }
 
-  @Get("steam/signup/success")
+  @Get("steam/sign-up/success")
   @Redirect()
   @UseGuards(SteamRegGuard)
   async steamRegister() {
@@ -61,9 +57,9 @@ export class AuthController {
     return { url: `${protocol}://${hostname}/` };
   }
 
-  @Get("signout")
+  @Get("sign-out")
   @UseGuards(IsAuthenticatedGuard)
-  async signout(@Req() request) {
+  async signOut(@Req() request) {
     const user: string = request.session.passport.user.steamid;
 
     const logoutError = await new Promise((resolve) => {

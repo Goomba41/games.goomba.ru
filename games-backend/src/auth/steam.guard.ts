@@ -3,7 +3,7 @@ import { AuthGuard } from "@nestjs/passport";
 // import { Request } from 'express';
 
 @Injectable()
-export class SteamAuthGuard extends AuthGuard("steamSignin") {
+export class SteamAuthGuard extends AuthGuard("steamSignIn") {
   constructor() {
     super();
   }
