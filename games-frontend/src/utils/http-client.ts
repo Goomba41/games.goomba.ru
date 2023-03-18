@@ -1,7 +1,7 @@
 import axios, {
   AxiosError,
-  type AxiosRequestConfig,
   type AxiosResponse,
+  type InternalAxiosRequestConfig,
 } from "axios";
 // Needed for file saver
 // import FileSaver from "file-saver";
@@ -32,7 +32,7 @@ const router = useRouter();
 // Интерсептор на запрос
 // Подсовываем токен авторизации пользователя
 axios.interceptors.request.use(
-  async (config: AxiosRequestConfig) => {
+  async (config: InternalAxiosRequestConfig) => {
     // const authStore = useAuthStore();
     const loadingStore = useLoadingStore();
     // * Deprecated
@@ -140,7 +140,7 @@ axios.interceptors.response.use(
     const authErrorsCodes: number[] = [401, 403];
 
     if (error.response && authErrorsCodes.includes(error.response.status)) {
-      authStore.signout().then((response: any) => {
+      authStore.signOut().then((response: any) => {
         console.log(response);
         if (authErrorsCodes.includes(response.data.StatusCode)) {
           toast.error("Сессия истекла, необходимо войти заново!");
