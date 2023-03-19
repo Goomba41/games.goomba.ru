@@ -61,11 +61,7 @@ export const useAuthStore = defineStore({
           } else {
             this.user = null;
             this.authenticated = false;
-            this.$router.push({ name: "login" });
           }
-        } else {
-          // TODO ошибка проверки toaster
-          this.$router.push({ name: "login" });
         }
       } finally {
         this.loading = false;
