@@ -1,4 +1,11 @@
-import { CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
+import { CreateDateColumn, Entity, PrimaryColumn, Column } from "typeorm";
+
+export interface IProfileDecorations {
+  avatar: string;
+  frame: string;
+  background: string;
+  miniProfileBackground: string;
+}
 
 @Entity({ name: "users", schema: "games" })
 export default class User {
@@ -12,4 +19,11 @@ export default class User {
 
   @CreateDateColumn({ comment: "Дата последнего входа" })
   signIn: Date;
+
+  @Column({
+    type: "json",
+    comment: "Визуальные украшения профиля (рамка, фоны, аватар)",
+    nullable: true,
+  })
+  profileDecorations: IProfileDecorations;
 }

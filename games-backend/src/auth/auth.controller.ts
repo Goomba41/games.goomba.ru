@@ -10,12 +10,23 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
+import { InjectRepository } from "@nestjs/typeorm";
+
 import { SteamAuthGuard, SteamRegGuard } from "./steam.guard";
 import { IsAuthenticatedGuard } from "./authenticated.guard";
 
+import { UsersService } from "../users/users.service";
+import User from "../users/users.entity";
+import { Repository } from "typeorm";
+
 @Controller("auth")
 export class AuthController {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+    private configService: ConfigService,
+    private usersService: UsersService
+  ) {}
 
   private readonly logger = new Logger(AuthController.name);
 
@@ -63,7 +74,9 @@ export class AuthController {
     const user: string = request.session.passport.user.steamid;
 
     const logoutError = await new Promise((resolve) => {
-      request.logOut({ keepSessionInfo: false }, (error) => resolve(error));
+      request.logOut({ keepSessionInfo: false }, (error: unknown) =>
+        resolve(error)
+      );
     });
 
     if (logoutError) {
@@ -79,19 +92,23 @@ export class AuthController {
 
   @Get("check")
   async state(@Session() session, @Req() request) {
-    // if (request.isAuthenticated()) {
-    //   return {
-    //     authenticated: request.isAuthenticated(),
-    //     user: request.session.passport.user,
-    //   };
-    // }
-    // return {
-    //   authenticated: request.isAuthenticated(),
-    //   user: null,
-    // };
+    const userProfile = request.session.passport?.user || null;
+
+    if (request.isAuthenticated()) {
+      this.usersService.updateDecorations();
+    }
+
+    if (userProfile !== null) {
+      userProfile.decorations = (
+        await this.usersRepository.findOneBy({
+          steamId: userProfile.steamid,
+        })
+      ).profileDecorations;
+    }
+
     return {
       authenticated: request.isAuthenticated(),
-      user: request.session.passport?.user || null,
+      user: userProfile,
     };
   }
 }

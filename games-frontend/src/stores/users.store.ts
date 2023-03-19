@@ -21,6 +21,12 @@ export interface IUser {
   timecreated: number;
   personastateflags: number;
   loccityid: number;
+  decorations: {
+    avatar: string;
+    frame: string;
+    background: string;
+    miniProfileBackground: string;
+  };
 }
 
 export const useUsersStore = defineStore({
