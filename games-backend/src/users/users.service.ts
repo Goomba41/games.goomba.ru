@@ -3,6 +3,7 @@ import {
   InternalServerErrorException,
   Logger,
 } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { InjectRepository } from "@nestjs/typeorm";
 
 import axios from "axios";
@@ -13,7 +14,7 @@ import { DeleteResult, Repository } from "typeorm";
 
 import User, { IProfileDecorations } from "./users.entity";
 
-interface ISteamProfile {
+export interface ISteamProfile {
   steamid: string;
   communityvisibilitystate: number;
   profilestate: number;
@@ -33,16 +34,27 @@ interface ISteamProfile {
   loccountrycode: string;
   locstatecode: string;
   loccityid: number;
+  gameid?: string;
+  gameextrainfo?: string;
+  decorations?: {
+    avatar: string;
+    frame: string;
+    background: string;
+    miniProfileBackground: string;
+  };
 }
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>
+    private usersRepository: Repository<User>,
+    private configService: ConfigService
   ) {}
 
   private readonly logger = new Logger(UsersService.name);
+  private readonly steamToken: string =
+    this.configService.get<string>("tokens.steam");
 
   create(steamProfile: ISteamProfile): Promise<User> {
     const steamId = steamProfile.steamid;
@@ -51,8 +63,32 @@ export class UsersService {
     return this.usersRepository.save(newUser);
   }
 
-  readOne(steamId: string): Promise<User> {
-    return this.usersRepository.findOneBy({ steamId });
+  async readOne(steamId: string): Promise<ISteamProfile> {
+    try {
+      const user: User = await this.usersRepository.findOneBy({ steamId });
+      let steamProfile: ISteamProfile;
+
+      if (user !== null) {
+        await axios
+          .get(
+            `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${this.steamToken}&steamids=${user.steamId}`
+          )
+          .then((response) => {
+            if (
+              response.status === 200 &&
+              response.data.response.players.length >= 1
+            ) {
+              steamProfile = response.data.response.players[0];
+              steamProfile.decorations = user.profileDecorations;
+            } else {
+              // todo error
+            }
+          });
+        return steamProfile;
+      } else {
+        // todo error
+      }
+    } catch (error) {}
   }
 
   readAll(): Promise<User[]> {

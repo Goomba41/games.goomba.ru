@@ -92,10 +92,13 @@ export class AuthController {
 
   @Get("check")
   async state(@Session() session, @Req() request) {
-    const userProfile = request.session.passport?.user || null;
+    let userProfile = null;
 
     if (request.isAuthenticated()) {
-      this.usersService.updateDecorations();
+      await this.usersService.updateDecorations();
+      userProfile = await this.usersService.readOne(
+        request.session.passport?.user.steamid
+      );
     }
 
     if (userProfile !== null) {

@@ -5,7 +5,7 @@ import { IsAuthenticatedGuard } from "src/auth/authenticated.guard";
 import User from "./users.entity";
 import { IProfileDecorations } from "./users.entity";
 
-import { UsersService } from "./users.service";
+import { UsersService, ISteamProfile } from "./users.service";
 
 @Controller("users")
 export class UsersController {
@@ -19,7 +19,7 @@ export class UsersController {
 
   @UseGuards(IsAuthenticatedGuard)
   @Get(":id")
-  readOne(@Param() params): Promise<User> {
+  readOne(@Param() params): Promise<ISteamProfile> {
     return this.usersService.readOne(params.id);
   }
 
