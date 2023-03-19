@@ -1,6 +1,8 @@
 import { createApp, markRaw } from "vue";
 import { createPinia } from "pinia";
 
+import type { Router } from "vue-router";
+
 import Toast, { type PluginOptions, POSITION } from "vue-toastification";
 import VueCookies from "vue-cookies";
 
@@ -53,6 +55,7 @@ const options: PluginOptions = {
 declare module "pinia" {
   export interface PiniaCustomProperties {
     $axios: AxiosStatic;
+    $router: Router;
   }
 }
 
@@ -60,6 +63,7 @@ const pinia = createPinia();
 
 pinia.use(({ store }) => {
   store.$axios = markRaw(axios);
+  store.$router = markRaw(router);
 });
 
 const app = createApp(App);

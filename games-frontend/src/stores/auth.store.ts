@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-// import axios from "axios";
 
 import type { IUser } from "./users.store";
 
@@ -10,6 +9,7 @@ export const useAuthStore = defineStore({
   state: () => ({
     user: null as null | IUser,
     authenticated: false as boolean,
+    loading: false as boolean,
   }),
   actions: {
     signIn(provider: TProviders = "steam") {
@@ -32,22 +32,44 @@ export const useAuthStore = defineStore({
           break;
       }
     },
-    signOut() {
-      return this.$axios.get(`/api/auth/sign-out`);
+    async signOut() {
+      try {
+        this.loading = true;
+
+        const response = await this.$axios.get(`/api/auth/sign-out`);
+        if (response.status === 200 && response.data.logout) {
+          this.user = null;
+          this.authenticated = response.data.logout;
+
+          this.$router.push({ name: "login" });
+        } else {
+          // TODO ошибка выхода toaster
+        }
+      } finally {
+        this.loading = false;
+      }
     },
     async sync() {
-      const state: any = await this.$axios
-        .get(`/api/auth/check`)
-        .then((response: any) => response.data);
-      if (state.authenticated) {
-        this.user = state.user;
-        this.authenticated = state.authenticated;
-      } else {
-        this.user = null;
-        this.authenticated = false;
-      }
+      try {
+        this.loading = true;
 
-      return state;
+        const response = await this.$axios.get(`/api/auth/check`);
+        if (response.status === 200 && response.data) {
+          if (response.data.authenticated) {
+            this.user = response.data.user;
+            this.authenticated = response.data.authenticated;
+          } else {
+            this.user = null;
+            this.authenticated = false;
+            this.$router.push({ name: "login" });
+          }
+        } else {
+          // TODO ошибка проверки toaster
+          this.$router.push({ name: "login" });
+        }
+      } finally {
+        this.loading = false;
+      }
     },
   },
 });
