@@ -1,7 +1,7 @@
 <template>
   <footer>
     <div class="years">
-      {{ ` goomba.ru ©️ ${copyrightYearString}` }}
+      {{ `goomba.ru ©️ ${copyrightYearString}` }}
     </div>
   </footer>
 </template>

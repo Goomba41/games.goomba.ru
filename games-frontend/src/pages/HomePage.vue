@@ -1,5 +1,5 @@
 <template>
-  <div class="page-wrapper" v-if="!loadingStore.loading">
+  <main class="page-wrapper">
     <button @click="test()">test</button>
     <button @click="signOut()">sign out</button>
     <textarea name="" id="" cols="30" rows="10" v-model="userJSON" />
@@ -13,17 +13,19 @@
     >
       {{ authStore.user?.communityvisibilitystate === 3 }}
     </div>
-  </div>
+
+    <div style="color: yellow">
+      {{ loadingStore.loading }} <br /><br />
+      {{ authStore.loading }}<br /><br />
+      {{ loadingStore.loading && authStore.loading }}
+    </div>
+  </main>
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from "vue-router";
-
 import { useAuthStore } from "@/stores/auth.store";
 import { useUsersStore } from "@/stores/users.store";
 import { useLoadingStore } from "@/stores/loading.store";
-
-const router = useRouter();
 
 const authStore = useAuthStore();
 const usersStore = useUsersStore();
@@ -37,11 +39,7 @@ function test() {
   });
 }
 function signOut() {
-  authStore.signOut().then(async (response: any) => {
-    console.log(response);
-    await authStore.sync();
-    router.push({ name: "login" });
-  });
+  authStore.signOut();
 }
 </script>
 

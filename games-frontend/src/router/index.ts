@@ -8,8 +8,15 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
-      component: () => import("../pages/HomePage.vue"),
+      name: "mainLayout",
+      component: () => import("../layouts/MainLayout.vue"),
+      children: [
+        {
+          path: "",
+          name: "home",
+          component: () => import("../pages/HomePage.vue"),
+        },
+      ],
     },
     {
       path: "/login",
@@ -29,16 +36,16 @@ router.beforeEach(async (to, from) => {
   const openPages = ["/login"];
   const authRequiredPage = !openPages.includes(to.path);
 
-  if (!auth.user || !auth.authenticated) await auth.sync();
+  // Если страница не логин и пользователь не авторизован, то
+  // попытаемся синхронизироваться с серверной сессией
+  // где проверим статус аутентификации, если есть, то пропишем
+  // пользователя в хранилище, иначе редиректим на логин
+  if ((!auth.user || !auth.authenticated) && to.path !== "/login")
+    await auth.sync();
 
   // Если страница логина и пользователь уже авторизован -
   // перенаправить откуда пришел
-  if (
-    !authRequiredPage &&
-    to.path === "/login" &&
-    auth.user &&
-    auth.authenticated
-  ) {
+  if (to.path === "/login" && auth.user && auth.authenticated) {
     return from.fullPath;
   }
 

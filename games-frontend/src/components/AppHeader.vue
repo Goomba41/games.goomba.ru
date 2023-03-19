@@ -1,5 +1,5 @@
 <template>
-  <div class="appname">
+  <header class="appname">
     <div class="appname__heading">
       <logo class="logo" />
       <div class="appname__text">
@@ -17,7 +17,7 @@
     <div class="appname__subheading">
       {{ currentHeading.decoded }}
     </div>
-  </div>
+  </header>
 </template>
 
 <script lang="ts" setup>
