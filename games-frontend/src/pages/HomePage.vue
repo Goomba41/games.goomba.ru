@@ -49,9 +49,41 @@
           />
         </div>
         <div class="user-info">
-          <div class="nickname">{{ authStore.user?.personaname }}</div>
-          <div class="real-name">{{ authStore.user?.realname }}</div>
-          <div class="status">{{ authStore.user?.personastate }}</div>
+          <div class="names">
+            <div class="nickname">{{ authStore.user?.personaname }}</div>
+            <div class="real-name">{{ authStore.user?.realname }}</div>
+          </div>
+
+          <div class="status offline" v-if="authStore.user?.personastate === 0">
+            <GhostIcon /> Не в сети
+          </div>
+          <div
+            class="status online"
+            v-else-if="authStore.user?.personastate === 1"
+          >
+            <FlashIcon /> В сети
+          </div>
+          <div
+            class="status busy"
+            v-else-if="authStore.user?.personastate === 2"
+          ></div>
+          <div
+            class="status afk"
+            v-else-if="authStore.user?.personastate === 3"
+          >
+            <WalkIcon /> Нет на месте
+          </div>
+          <div
+            class="status snooze"
+            v-else-if="authStore.user?.personastate === 4"
+          ></div>
+
+          <div class="in-game" v-if="authStore.user?.gameid">
+            <GamepadIcon />
+            <div class="game-title">
+              {{ authStore.user?.gameextrainfo }}
+            </div>
+          </div>
         </div>
       </div>
       <div></div>
@@ -63,7 +95,7 @@
     <div class="game"></div> -->
 
     <!-- <button @click="test()">test</button> -->
-    <button @click="signOut()">sign out</button>
+    <button @click="signOut()" class="tw-text-white">sign out</button>
     <!-- <textarea name="" id="" cols="30" rows="10" v-model="userJSON" /> -->
     <div
       :class="[
@@ -85,6 +117,11 @@
 </template>
 
 <script lang="ts" setup>
+import GamepadIcon from "@/components/icons/GamepadFill.vue";
+import FlashIcon from "@/components/icons/FlashFill.vue";
+import GhostIcon from "@/components/icons/GhostFill.vue";
+import WalkIcon from "@/components/icons/WalkFill.vue";
+
 import { useAuthStore } from "@/stores/auth.store";
 import { useUsersStore } from "@/stores/users.store";
 import { useLoadingStore } from "@/stores/loading.store";
@@ -114,9 +151,9 @@ function backgroundIsVideo(background: string) {
   background-color: #181a21;
   @apply tw-px-6;
 
-  .game {
-    @apply tw-bg-slate-800 tw-rounded-3xl tw-w-full tw-h-80 tw-mt-4 tw-p-4 tw-flex tw-flex-col;
-  }
+  // .game {
+  //   @apply tw-bg-slate-800 tw-rounded-3xl tw-w-full tw-h-80 tw-mt-4 tw-p-4 tw-flex tw-flex-col;
+  // }
 
   .profile-summary-wrapper {
     @apply tw-bg-slate-800 tw-rounded-3xl tw-w-full tw-mt-4 tw-p-4 tw-flex tw-flex-col tw-relative tw-z-0;
@@ -139,7 +176,7 @@ function backgroundIsVideo(background: string) {
   }
 
   .profile-avatar-wrapper {
-    @apply tw-relative tw-pointer-events-none tw-w-1/3;
+    @apply tw-relative tw-pointer-events-none tw-w-24;
 
     img {
       @apply tw-block tw-w-full tw-h-full;
@@ -165,7 +202,44 @@ function backgroundIsVideo(background: string) {
   }
 
   .user-info {
-    @apply tw-ml-3;
+    @apply tw-ml-3 tw-w-1/2 tw-flex-auto;
+
+    .nickname {
+      @apply tw-font-semibold tw-text-xl tw-text-slate-200 tw-whitespace-nowrap tw-text-ellipsis tw-overflow-hidden tw-w-4/5;
+    }
+    .real-name {
+      @apply tw-font-normal tw-text-xs tw-text-slate-400 tw-whitespace-nowrap tw-text-ellipsis tw-overflow-hidden;
+    }
+
+    .status {
+      @apply tw-flex tw-flex-row tw-font-semibold tw-text-lg tw-mt-2 tw-items-center;
+
+      & > svg {
+        @apply tw-mr-2 tw-shrink-0;
+      }
+
+      &.online {
+        @apply tw-text-teal-500;
+      }
+      &.offline {
+        @apply tw-text-gray-400;
+      }
+      &.afk {
+        @apply tw-text-sky-300;
+      }
+    }
+
+    & > .in-game {
+      @apply tw-flex tw-flex-row tw-text-green-500 tw-font-semibold tw-text-base tw-mt-auto;
+
+      & > svg {
+        @apply tw-mr-2 tw-shrink-0;
+      }
+
+      .game-title {
+        @apply tw-whitespace-nowrap tw-text-ellipsis tw-overflow-hidden;
+      }
+    }
   }
 }
 </style>
