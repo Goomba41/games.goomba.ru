@@ -50,18 +50,33 @@
         </div>
         <div class="user-info">
           <div class="names">
-            <div class="nickname">{{ authStore.user?.personaname }}</div>
+            <a
+              ref="profileLink"
+              v-if="authStore.user?.profileurl"
+              target="_blank"
+              :href="authStore.user?.profileurl"
+              class="nickname"
+            >
+              {{
+                profileLinkIsHovered || profileLinkIsPressed
+                  ? getProfileName(authStore.user?.profileurl)
+                  : authStore.user?.personaname
+              }}
+            </a>
+            <div v-else class="nickname">{{ authStore.user?.personaname }}</div>
             <div class="real-name">{{ authStore.user?.realname }}</div>
           </div>
 
           <div class="status offline" v-if="authStore.user?.personastate === 0">
-            <GhostIcon /> Не в сети
+            <IconDuotoneOffline width="1.5rem" height="1.5rem" />
+            <span>Не в сети</span>
           </div>
           <div
             class="status online"
             v-else-if="authStore.user?.personastate === 1"
           >
-            <FlashIcon /> В сети
+            <IconDuotoneOnline width="1.5rem" height="1.5rem" />
+            <span>В сети</span>
           </div>
           <div
             class="status busy"
@@ -71,7 +86,8 @@
             class="status afk"
             v-else-if="authStore.user?.personastate === 3"
           >
-            <WalkIcon /> Нет на месте
+            <IconSleep width="1.5rem" height="1.5rem" />
+            <span>Нет на месте</span>
           </div>
           <div
             class="status snooze"
@@ -79,10 +95,10 @@
           ></div>
 
           <div class="in-game" v-if="authStore.user?.gameid">
-            <GamepadIcon />
-            <div class="game-title">
+            <IconDuotoneGamepad width="1.5rem" height="1.5rem" />
+            <span class="game-title">
               {{ authStore.user?.gameextrainfo }}
-            </div>
+            </span>
           </div>
         </div>
       </div>
@@ -117,10 +133,14 @@
 </template>
 
 <script lang="ts" setup>
-import GamepadIcon from "@/components/icons/GamepadFill.vue";
-import FlashIcon from "@/components/icons/FlashFill.vue";
-import GhostIcon from "@/components/icons/GhostFill.vue";
-import WalkIcon from "@/components/icons/WalkFill.vue";
+import { ref } from "vue";
+
+import { useElementHover, useMousePressed } from "@vueuse/core";
+
+import IconDuotoneGamepad from "@/components/icons/IconDuotoneGamepad.vue";
+import IconDuotoneOnline from "@/components/icons/IconDuotoneOnline.vue";
+import IconDuotoneOffline from "@/components/icons/IconDuotoneOffline.vue";
+import IconSleep from "@/components/icons/IconSleep.vue";
 
 import { useAuthStore } from "@/stores/auth.store";
 import { useUsersStore } from "@/stores/users.store";
@@ -129,6 +149,11 @@ import { useLoadingStore } from "@/stores/loading.store";
 const authStore = useAuthStore();
 const usersStore = useUsersStore();
 const loadingStore = useLoadingStore();
+
+const profileLink = ref();
+const profileLinkIsHovered = useElementHover(profileLink);
+const profileLinkIsPressed = useMousePressed({ target: profileLink }).pressed
+  .value;
 
 // const userJSON = JSON.stringify(authStore.user, undefined, 4);
 
@@ -144,6 +169,10 @@ function signOut() {
 function backgroundIsVideo(background: string) {
   return background.split(".").reverse()[0] === "mp4";
 }
+
+function getProfileName(profileUrl: string) {
+  return `@${profileUrl.split("/").reverse()[1]}`;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -152,11 +181,14 @@ function backgroundIsVideo(background: string) {
   @apply tw-px-6;
 
   // .game {
-  //   @apply tw-bg-slate-800 tw-rounded-3xl tw-w-full tw-h-80 tw-mt-4 tw-p-4 tw-flex tw-flex-col;
+  //   @apply tw-bg-slate-800 tw-rounded-xl tw-w-full tw-h-80 tw-mt-4 tw-p-4 tw-flex tw-flex-col;
   // }
 
   .profile-summary-wrapper {
-    @apply tw-bg-slate-800 tw-rounded-3xl tw-w-full tw-mt-4 tw-p-4 tw-flex tw-flex-col tw-relative tw-z-0;
+    box-shadow: rgb(255 255 255 / 5%) 0px 6px 24px 0px,
+      rgb(255 255 255 / 8%) 0px 0px 0px 1px;
+
+    @apply tw-bg-slate-800 tw-rounded-xl tw-w-full tw-mt-8 tw-mb-auto tw-p-4 tw-flex tw-flex-col tw-relative tw-z-0;
 
     > div {
       @apply tw-flex tw-flex-row tw-w-full;
@@ -167,10 +199,10 @@ function backgroundIsVideo(background: string) {
     }
 
     .background {
-      @apply tw-absolute tw-top-0 tw-left-0 tw-right-0 tw-bottom-0 tw-z-[-1] tw-rounded-3xl;
+      @apply tw-absolute tw-top-0 tw-left-0 tw-right-0 tw-bottom-0 tw-z-[-1] tw-rounded-xl;
 
       .video-background {
-        @apply tw-rounded-3xl tw-w-full tw-h-full tw-object-cover tw-object-right-top;
+        @apply tw-rounded-xl tw-w-full tw-h-full tw-object-cover tw-object-right-top;
       }
     }
   }
@@ -205,14 +237,14 @@ function backgroundIsVideo(background: string) {
     @apply tw-ml-3 tw-w-1/2 tw-flex-auto;
 
     .nickname {
-      @apply tw-font-semibold tw-text-xl tw-text-slate-200 tw-whitespace-nowrap tw-text-ellipsis tw-overflow-hidden tw-w-4/5;
+      @apply tw-font-semibold tw-text-xl tw-text-slate-200 tw-whitespace-nowrap tw-text-ellipsis tw-overflow-hidden tw-w-4/5 tw-cursor-pointer;
     }
     .real-name {
       @apply tw-font-normal tw-text-xs tw-text-slate-400 tw-whitespace-nowrap tw-text-ellipsis tw-overflow-hidden;
     }
 
     .status {
-      @apply tw-flex tw-flex-row tw-font-semibold tw-text-lg tw-mt-2 tw-items-center;
+      @apply tw-flex tw-flex-row tw-font-semibold tw-text-base tw-mt-3 tw-items-center;
 
       & > svg {
         @apply tw-mr-2 tw-shrink-0;
