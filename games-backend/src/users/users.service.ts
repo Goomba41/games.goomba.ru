@@ -34,6 +34,7 @@ export interface ISteamProfile {
   loccountrycode: string;
   locstatecode: string;
   loccityid: number;
+  playerlevel: number | null;
   gameid?: string;
   gameextrainfo?: string;
   decorations?: {
@@ -84,6 +85,22 @@ export class UsersService {
               // todo error
             }
           });
+
+        await axios
+          .get(
+            `http://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=${this.steamToken}&steamid=${user.steamId}`
+          )
+          .then((response) => {
+            if (
+              response.status === 200 &&
+              response.data.response.player_level
+            ) {
+              steamProfile.playerlevel = response.data.response.player_level;
+            } else {
+              steamProfile.playerlevel = null;
+            }
+          });
+
         return steamProfile;
       } else {
         // todo error

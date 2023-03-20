@@ -21,6 +21,7 @@ export interface IUser {
   timecreated: number;
   personastateflags: number;
   loccityid: number;
+  playerlevel: number | null;
   gameid?: string;
   gameextrainfo?: string;
   decorations: {
