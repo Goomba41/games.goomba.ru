@@ -29,7 +29,7 @@ import {
 import App from "./App.vue";
 import router from "./router";
 
-import "./assets/main.css";
+import "./assets/main.scss";
 import "vue-toastification/dist/index.css";
 
 library.add(faSteam, faGoogle, faGithub, faMicrosoft, faTwitch);
