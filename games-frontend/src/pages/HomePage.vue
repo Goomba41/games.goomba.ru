@@ -96,22 +96,24 @@
               <div
                 class="status busy"
                 v-else-if="authStore.user?.personastate === 2"
-              ></div>
+              >
+                <IconBusy width="1.5rem" height="1.5rem" />
+                <span>Занят</span>
+              </div>
               <div
                 class="status afk"
                 v-else-if="authStore.user?.personastate === 3"
               >
-                <IconSleep width="1.5rem" height="1.5rem" />
-                <span
-                  title="Away From Keyboard (Нет на месте)"
-                  class="tw-cursor-help"
-                  >AFK</span
-                >
+                <IconAFK width="1.5rem" height="1.5rem" />
+                <span title="Отошёл" class="tw-cursor-help">AFK</span>
               </div>
               <div
                 class="status snooze"
                 v-else-if="authStore.user?.personastate === 4"
-              ></div>
+              >
+                <IconSleep width="1.5rem" height="1.5rem" />
+                <span>Бездействует</span>
+              </div>
             </div>
 
             <div class="badges">
@@ -148,9 +150,11 @@
                 v-if="authStore.user?.playerlevel"
               >
                 {{ authStore.user?.playerlevel }}
+                <IconLevel class="icon" width="1.25rem" height="1.25rem" />
               </div>
               <div class="creation" v-if="authStore.user?.timecreated">
                 {{ calculateYearsRegistered(authStore.user?.timecreated) }}
+                <IconCake class="icon" width="1.25rem" height="1.25rem" />
               </div>
             </div>
           </div>
@@ -202,6 +206,10 @@ import IconDuotoneGamepad from "@/components/icons/IconDuotoneGamepad.vue";
 import IconDuotoneOnline from "@/components/icons/IconDuotoneOnline.vue";
 import IconDuotoneOffline from "@/components/icons/IconDuotoneOffline.vue";
 import IconSleep from "@/components/icons/IconSleep.vue";
+import IconBusy from "@/components/icons/IconBusy.vue";
+import IconAFK from "@/components/icons/IconAFK.vue";
+import IconCake from "@/components/icons/IconCake.vue";
+import IconLevel from "@/components/icons/IconLevel.vue";
 
 import { useAuthStore } from "@/stores/auth.store";
 import { useUsersStore } from "@/stores/users.store";
@@ -237,6 +245,10 @@ function getProfileName(profileUrl: string) {
 
 function calculateYearsRegistered(timeStamp: number) {
   return dt.now().year - dt.fromSeconds(timeStamp).year;
+}
+
+function humanReadableTime(timeStamp: number) {
+  // return dt.fromSeconds(timeStamp).toFormat;
 }
 </script>
 
@@ -344,10 +356,14 @@ function calculateYearsRegistered(timeStamp: number) {
       }
 
       .badges {
-        @apply tw-ml-3 tw-text-slate-100;
+        @apply tw-ml-3 tw-text-slate-100 tw-text-sm;
 
         > * {
-          @apply tw-w-8 tw-h-8 tw-rounded-full tw-mt-2 first:tw-mt-0 tw-bg-blue-50 tw-text-center tw-font-semibold tw-bg-slate-400 tw-bg-opacity-40 tw-border-4;
+          @apply tw-w-8 tw-h-8 tw-rounded-full tw-mt-2 first:tw-mt-0 tw-text-center tw-font-semibold tw-bg-slate-400 tw-bg-opacity-40 tw-border-4 tw-flex tw-justify-center tw-items-center;
+
+          > .icon {
+            @apply tw-absolute tw-translate-x-3 tw-translate-y-3 tw-text-slate-200;
+          }
         }
 
         .level {
