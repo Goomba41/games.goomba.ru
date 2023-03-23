@@ -1,13 +1,13 @@
 import { defineStore } from "pinia";
 
-import type { IUser } from "./users.store";
+import type { User } from "@/utils/types";
 
 type TProviders = "steam" | "google" | "github" | "microsoft" | "twitch";
 
 export const useAuthStore = defineStore({
   id: "auth",
   state: () => ({
-    user: null as null | IUser,
+    user: undefined as undefined | User,
     authenticated: false as boolean,
     loading: false as boolean,
   }),
@@ -38,7 +38,7 @@ export const useAuthStore = defineStore({
 
         const response = await this.$axios.get(`/api/auth/sign-out`);
         if (response.status === 200 && response.data.logout) {
-          this.user = null;
+          this.user = undefined;
           this.authenticated = response.data.logout;
 
           this.$router.push({ name: "login" });
@@ -59,7 +59,7 @@ export const useAuthStore = defineStore({
             this.user = response.data.user;
             this.authenticated = response.data.authenticated;
           } else {
-            this.user = null;
+            this.user = undefined;
             this.authenticated = false;
           }
         }

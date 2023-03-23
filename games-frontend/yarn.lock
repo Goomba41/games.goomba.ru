@@ -521,6 +521,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/humanize-duration@npm:^3.27.1":
+  version: 3.27.1
+  resolution: "@types/humanize-duration@npm:3.27.1"
+  checksum: d3d69b64918d0cee4aa69580dd04d1b96e3385645d398e27b1535f8c6d0252b0235defb16619379a6196c6bbdfc7b6032f010b25cac44903a32b09db8aa06f30
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:^7.0.9":
   version: 7.0.11
   resolution: "@types/json-schema@npm:7.0.11"
@@ -2510,6 +2517,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": ^6.3.0
     "@fortawesome/vue-fontawesome": latest-3
     "@rushstack/eslint-patch": ^1.2.0
+    "@types/humanize-duration": ^3.27.1
     "@types/luxon": ^3.2.0
     "@types/node": ^18.15.3
     "@vitejs/plugin-vue": ^4.1.0
@@ -2522,6 +2530,7 @@ __metadata:
     eslint: ^8.36.0
     eslint-plugin-vue: ^9.9.0
     global: ^4.4.0
+    humanize-duration: ^3.28.0
     luxon: ^3.3.0
     npm-check-updates: ^16.7.12
     npm-run-all: ^4.1.5
@@ -2539,6 +2548,7 @@ __metadata:
     vue-router: ^4.1.6
     vue-toastification: next
     vue-tsc: ^1.2.0
+    zod: ^3.21.4
   languageName: unknown
   linkType: soft
 
@@ -2886,6 +2896,13 @@ __metadata:
     agent-base: 6
     debug: 4
   checksum: 571fccdf38184f05943e12d37d6ce38197becdd69e58d03f43637f7fa1269cf303a7d228aa27e5b27bbd3af8f09fd938e1c91dcfefff2df7ba77c20ed8dfc765
+  languageName: node
+  linkType: hard
+
+"humanize-duration@npm:^3.28.0":
+  version: 3.28.0
+  resolution: "humanize-duration@npm:3.28.0"
+  checksum: dde595ab4729d82147db41d8ca0afa86bf3f20d74cd1323ea52f299091a4f1dcb2a45b2d27ce78ab9bb0d9e66d8eb8f2628a67be36a535af645eb282a963ff7f
   languageName: node
   linkType: hard
 
@@ -6030,5 +6047,12 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
+  languageName: node
+  linkType: hard
+
+"zod@npm:^3.21.4":
+  version: 3.21.4
+  resolution: "zod@npm:3.21.4"
+  checksum: f185ba87342ff16f7a06686767c2b2a7af41110c7edf7c1974095d8db7a73792696bcb4a00853de0d2edeb34a5b2ea6a55871bc864227dace682a0a28de33e1f
   languageName: node
   linkType: hard

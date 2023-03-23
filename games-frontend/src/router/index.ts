@@ -40,17 +40,17 @@ router.beforeEach(async (to, from) => {
   // попытаемся синхронизироваться с серверной сессией
   // где проверим статус аутентификации, если есть, то пропишем
   // пользователя в хранилище, иначе редиректим на логин
-  if (auth.user === null || !auth.authenticated) await auth.sync();
+  if (auth.user === undefined || !auth.authenticated) await auth.sync();
 
   // Если страница логина и пользователь уже авторизован -
   // перенаправить откуда пришел
-  if (to.path === "/login" && auth.user !== null && auth.authenticated) {
+  if (to.path === "/login" && auth.user !== undefined && auth.authenticated) {
     return from.fullPath;
   }
 
   // Если страница требует авторизации и пользователь не авторизован -
   // перенаправить на страницу логина
-  if (authRequiredPage && (auth.user === null || !auth.authenticated)) {
+  if (authRequiredPage && (auth.user === undefined || !auth.authenticated)) {
     return "/login";
   }
 });
