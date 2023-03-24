@@ -1,13 +1,16 @@
 <template>
   <main class="page-wrapper">
-    <SteamProfileBlock :user="authStore.user" />
+    <SteamProfileBlock
+      :user="authStore.user"
+      :loading="loadingStore.loading || authStore.loading"
+    />
 
     <!-- <div class="game"></div>
     <div class="game"></div>
     <div class="game"></div>
     <div class="game"></div> -->
 
-    <!-- <button @click="test()">test</button> -->
+    <button @click="test()" class="tw-text-yellow-200">test</button>
     <button @click="signOut()" class="tw-text-white">sign out</button>
     <!-- <textarea name="" id="" cols="30" rows="10" v-model="userJSON" /> -->
     <div
@@ -43,7 +46,7 @@ const loadingStore = useLoadingStore();
 // const userJSON = JSON.stringify(authStore.user, undefined, 4);
 
 function test() {
-  usersStore.readAll().then((response: any) => {
+  authStore.sync().then((response: any) => {
     console.log(response);
   });
 }
@@ -55,7 +58,5 @@ function signOut() {
 <style lang="scss" scoped>
 .page-wrapper {
   @apply tw-px-6;
-
-  
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="user"
+    v-if="user && !loading"
     :class="{
       'profile-summary-wrapper': true,
       offline: user.personastate === 0,
@@ -122,7 +122,76 @@
     </div>
     <div></div>
   </div>
-  <div v-else class="preloader tw-text-white">PRELOADER</div>
+
+  <div v-else class="profile-summary-wrapper preloader">
+    <div>
+      <div class="profile-avatar-wrapper tw-animate-pulse">
+        <div
+          class="tw-flex tw-items-center tw-justify-center tw-w-full tw-bg-gray-500 tw-rounded tw-h-full"
+        >
+          <svg
+            class="tw-w-12 tw-h-12 tw-text-gray-700"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            fill="currentColor"
+            viewBox="0 0 640 512"
+          >
+            <path
+              d="M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div class="info-wrapper tw-ml-1">
+        <div class="info">
+          <div class="user tw-mt-1">
+            <div class="names tw-animate-pulse">
+              <div
+                class="tw-h-5 tw-bg-gray-500 tw-rounded-full tw-dark:bg-gray-700 tw-mb-2"
+              ></div>
+              <div
+                class="tw-h-2 tw-bg-gray-500 tw-rounded-full tw-dark:bg-gray-700"
+              ></div>
+            </div>
+
+            <div class="tw-animate-pulse">
+              <div
+                class="tw-h-5 tw-bg-gray-500 tw-rounded-full tw-dark:bg-gray-700 tw-mt-3"
+              ></div>
+              <div
+                class="tw-h-2 tw-bg-gray-500 tw-rounded-full tw-dark:bg-gray-700 tw-mt-2"
+              ></div>
+            </div>
+          </div>
+
+          <div class="badges tw-animate-pulse">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="tw-text-gray-500 tw-border-gray-700"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2z"
+                />
+              </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="tw-text-gray-500 tw-border-gray-700"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div></div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -220,6 +289,9 @@ function levelClass(level: number) {
 </script>
 
 <style scoped lang="scss">
+.preloader {
+}
+
 .profile-summary-wrapper {
   @apply tw-bg-slate-800 tw-rounded-xl tw-w-80 xl:tw-w-96 tw-mt-8 tw-mb-auto tw-p-4 tw-flex tw-flex-col tw-relative tw-z-0;
 
@@ -339,6 +411,8 @@ function levelClass(level: number) {
         }
 
         .level {
+          @apply tw-border-gray-600;
+
           &.lvl_0 {
             border-color: #9b9b9b;
           }
