@@ -78,7 +78,7 @@
                 <IconDuotoneOffline width="1.5rem" height="1.5rem" />
                 <span>Не в сети</span>
               </div>
-              <div class="sub">{{ humanReadableTime(user.lastlogoff) }}</div>
+              <div class="sub" v-if="user.lastlogoff">{{ humanReadableTime(user.lastlogoff) }}</div>
             </div>
             <div class="status online" v-else-if="user.personastate === 1">
               <IconDuotoneOnline width="1.5rem" height="1.5rem" />
