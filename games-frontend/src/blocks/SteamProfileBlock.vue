@@ -29,7 +29,7 @@
         <source :src="user.decorations.background" type="video/mp4" />
       </video>
     </div>
-    <div>
+    <div class="profile-data">
       <div
         :class="[
           'profile-avatar-wrapper',
@@ -120,11 +120,12 @@
         </div>
       </div>
     </div>
-    <div></div>
+
+    <div class="profile-global-stats"></div>
   </div>
 
   <div v-else class="profile-summary-wrapper preloader">
-    <div>
+    <div class="profile-data">
       <div class="profile-avatar-wrapper tw-animate-pulse">
         <div
           class="tw-flex tw-items-center tw-justify-center tw-w-full tw-bg-gray-500 tw-rounded tw-h-full"
@@ -289,11 +290,16 @@ function levelClass(level: number) {
 </script>
 
 <style scoped lang="scss">
-.preloader {
+.profile-global-stats {
+  @apply tw-h-24 tw-rounded-b-xl tw-flex tw-flex-col tw-p-4 tw-backdrop-blur-sm tw-bg-gradient-to-b tw-from-[#181a1eb3] tw-to-[#181a1e66];
 }
 
 .profile-summary-wrapper {
-  @apply tw-bg-slate-800 tw-rounded-xl tw-w-80 xl:tw-w-96 tw-mt-8 tw-mb-auto tw-p-4 tw-flex tw-flex-col tw-relative tw-z-0;
+  @apply tw-bg-slate-800 tw-rounded-xl tw-w-80 xl:tw-w-96 tw-mt-8 tw-mb-auto tw-flex tw-flex-col tw-relative tw-z-0;
+
+  .profile-data {
+    @apply tw-px-4 tw-pt-4 tw-pb-2;
+  }
 
   &.online {
     box-shadow: theme("colors.teal.500") 0px 0px 0px 0px,
