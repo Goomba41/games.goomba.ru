@@ -78,7 +78,7 @@
                 <IconDuotoneOffline width="1.5rem" height="1.5rem" />
                 <span>Не в сети</span>
               </div>
-              <div class="sub">{{ humanReadableTime(user.lastlogoff) }}</div>
+              <div class="sub">{{ lastLogin }}</div>
             </div>
             <div class="status online" v-else-if="user.personastate === 1">
               <IconDuotoneOnline width="1.5rem" height="1.5rem" />
@@ -126,7 +126,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type PropType } from "vue";
+import { onMounted, ref, type PropType, type Ref } from "vue";
 
 import humanizeDuration from "humanize-duration";
 import { DateTime as dt } from "luxon";
@@ -144,7 +144,7 @@ import IconLevel from "@/components/icons/IconLevel.vue";
 import type { User } from "@/utils/types";
 import { UserSchema } from "@/utils/types";
 
-defineProps({
+const props = defineProps({
   user: {
     type: Object as PropType<User>,
     required: false,
@@ -164,6 +164,10 @@ defineProps({
   },
 });
 
+onMounted(() => {
+  if (props.user) humanReadableTime(props.user.lastlogoff);
+});
+
 const profileLink = ref();
 const profileLinkIsHovered = useElementHover(profileLink);
 const profileLinkIsPressed = useMousePressed({ target: profileLink }).pressed
@@ -181,16 +185,22 @@ function calculateYearsRegistered(timeStamp: number) {
   return dt.now().year - dt.fromSeconds(timeStamp).year;
 }
 
-function humanReadableTime(timeStamp: number): string {
+const lastLogin: Ref<string> = ref("");
+
+function humanReadableTime(timeStamp: number) {
   const now = dt.now();
   const logoff = dt.fromSeconds(timeStamp);
 
-  const { milliseconds } = now.diff(logoff).toObject();
+  let milliseconds = now.diff(logoff).toObject().milliseconds || 0;
 
-  return `Был ${humanizeDuration(milliseconds, {
-    language: "ru",
-    largest: 1,
-  })} назад`;
+  setInterval(() => {
+    milliseconds += 1000;
+
+    lastLogin.value = `Был ${humanizeDuration(milliseconds, {
+      language: "ru",
+      largest: 1,
+    })} назад`;
+  }, 1000);
 }
 
 function levelClass(level: number) {
