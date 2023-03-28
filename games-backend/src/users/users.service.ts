@@ -1,49 +1,20 @@
 import {
   Injectable,
-  InternalServerErrorException,
   Logger,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { InjectRepository } from "@nestjs/typeorm";
 
 import axios from "axios";
+// import SteamUser = require("steam-user");
+// import LogOnDetailsNameToken from "steam-user";
 import * as cheerio from "cheerio";
 import { DateTime as dt } from "luxon";
 import { RequestContext } from "nestjs-request-context/dist/request-context.model";
-import { DeleteResult, Repository } from "typeorm";
+import { Repository } from "typeorm";
 
-import User, { IProfileDecorations } from "./users.entity";
-
-export interface ISteamProfile {
-  steamid: string;
-  communityvisibilitystate: number;
-  profilestate: number;
-  personaname: string;
-  commentpermission: number;
-  profileurl: string;
-  avatar: string;
-  avatarmedium: string;
-  avatarfull: string;
-  avatarhash: string;
-  lastlogoff: number;
-  personastate: number;
-  realname: string;
-  primaryclanid: string;
-  timecreated: number;
-  personastateflags: number;
-  loccountrycode: string;
-  locstatecode: string;
-  loccityid: number;
-  playerlevel: number | null;
-  gameid?: string;
-  gameextrainfo?: string;
-  decorations?: {
-    avatar: string;
-    frame: string;
-    background: string;
-    miniProfileBackground: string;
-  };
-}
+import User from "./users.entity";
+import { User as SteamProfile, ProfileDecorations } from "../types/users.types";
 
 @Injectable()
 export class UsersService {
@@ -51,23 +22,23 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private configService: ConfigService
-  ) {}
+  ) { }
 
   private readonly logger = new Logger(UsersService.name);
   private readonly steamToken: string =
     this.configService.get<string>("tokens.steam");
 
-  create(steamProfile: ISteamProfile): Promise<User> {
+  create(steamProfile: SteamProfile): Promise<User> {
     const steamId = steamProfile.steamid;
     const newUser = this.usersRepository.create({ steamId });
     this.logger.log(`User with steam id ${steamId} is created`);
     return this.usersRepository.save(newUser);
   }
 
-  async readOne(steamId: string): Promise<ISteamProfile> {
+  async readOne(steamId: string): Promise<SteamProfile> {
     try {
-      const user: User = await this.usersRepository.findOneBy({ steamId });
-      let steamProfile: ISteamProfile;
+      const user = await this.usersRepository.findOneBy({ steamId });
+      let steamProfile: SteamProfile;
 
       if (user !== null) {
         await axios
@@ -105,25 +76,20 @@ export class UsersService {
       } else {
         // todo error
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
-  readAll(): Promise<User[]> {
-    // return this.usersRepository.find();
-    throw new InternalServerErrorException();
-  }
-
-  async updateDecorations(): Promise<IProfileDecorations> {
+  async updateDecorations(): Promise<ProfileDecorations> {
     try {
       const req = RequestContext.currentContext.req;
       if (req.isAuthenticated()) {
-        const userSteamProfile: ISteamProfile = req.session.passport.user;
+        const userSteamProfile: SteamProfile = req.session.passport.user;
 
-        const user: User = await this.usersRepository.findOneBy({
+        const user = await this.usersRepository.findOneBy({
           steamId: userSteamProfile.steamid,
         });
 
-        const decorations: IProfileDecorations = user.profileDecorations || {
+        const decorations = user.profileDecorations || {
           avatar: "",
           frame: "",
           background: "",
@@ -176,11 +142,7 @@ export class UsersService {
 
         return decorations;
       }
-    } catch (error) {}
-  }
-
-  async delete(steamId: string): Promise<DeleteResult> {
-    return await this.usersRepository.delete(steamId);
+    } catch (error) { }
   }
 
   async signIn(steamId: string): Promise<boolean> {
@@ -195,5 +157,37 @@ export class UsersService {
     }
 
     return false;
+  }
+
+  logInSteam() {
+    // const req = RequestContext.currentContext.req;
+    // const user = new SteamUser();
+    // console.log(user);
+    // user.on("loggedOn", async (user2) => {
+    //   // const productInfo = await user.getProductInfo([740], []);
+    //   // const appName = productInfo.apps[740].appinfo.common.name;
+    //   // console.log(productInfo);
+    //   // console.log(appName);
+    //   console.log(user);
+    //   // console.log(user2);
+    //   // Gracefully logoff.
+    //   // user.logOff();
+    // });
+    // user.logOn({
+    //   // accountName: "bear_41",
+    //   // password: "eo090o7m9v044abo076IvwoOI2lux6o9",
+    //   steamID: req.session.passport.user.steamid,
+    //   // autoRelogin: false,
+    //   webLogonToken:
+    //     "eyAidHlwIjogIkpXVCIsICJhbGciOiAiRWREU0EiIH0.eyAiaXNzIjogInN0ZWFtIiwgInN1YiI6ICI3NjU2MTE5ODA1MzczOTczMCIsICJhdWQiOiBbICJjbGllbnQiLCAid2ViIiwgInJlbmV3IiwgImRlcml2ZSIgXSwgImV4cCI6IDE2OTgwMTE0MjcsICJuYmYiOiAxNjcwODc0NzM5LCAiaWF0IjogMTY3OTUxNDczOSwgImp0aSI6ICIwRDFEXzIyNDQxQTFDXzUzNDNDIiwgIm9hdCI6IDE2Nzk1MTQ3MzksICJwZXIiOiAxLCAiaXBfc3ViamVjdCI6ICI5NC4xODEuMjI1LjI1IiwgImlwX2NvbmZpcm1lciI6ICI5NC4xODEuMjI1LjI1IiB9.hmSaGEAsqIlhVqX1GYoOiWY5OyVHbpjTocP-GKpqsbP4GL8e5a2iJJoHJ4qWGv1HyQqUExERrEIXJO2l3C_MCQ",
+    // });
+    // webLogonToken: "32d2afeb7a0496866d814c07177abeef",
+    // interface LogOnDetailsNameToken {
+    //   accountName: string;
+    //   webLogonToken: string;
+    //   steamID: SteamID | string;
+    //   autoRelogin?: boolean;
+    // }
+    // 32d2afeb7a0496866d814c07177abeef
   }
 }

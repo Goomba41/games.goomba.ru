@@ -1,11 +1,6 @@
 import { CreateDateColumn, Entity, PrimaryColumn, Column } from "typeorm";
 
-export interface IProfileDecorations {
-  avatar: string;
-  frame: string;
-  background: string;
-  miniProfileBackground: string;
-}
+import type { ProfileDecorations } from "../types/users.types";
 
 @Entity({ name: "users", schema: "games" })
 export default class User {
@@ -25,5 +20,5 @@ export default class User {
     comment: "Визуальные украшения профиля (рамка, фоны, аватар)",
     nullable: true,
   })
-  profileDecorations: IProfileDecorations;
+  profileDecorations: ProfileDecorations;
 }
