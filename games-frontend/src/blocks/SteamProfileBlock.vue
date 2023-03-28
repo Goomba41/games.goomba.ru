@@ -167,16 +167,16 @@
           </div>
 
           <div class="badges tw-animate-pulse">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="tw-text-gray-500 tw-border-gray-700"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="currentColor"
-                  d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2z"
-                />
-              </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="tw-text-gray-500 tw-border-gray-700"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2z"
+              />
+            </svg>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="tw-text-gray-500 tw-border-gray-700"
@@ -211,8 +211,12 @@ import IconAFK from "@/components/icons/IconAFK.vue";
 import IconCake from "@/components/icons/IconCake.vue";
 import IconLevel from "@/components/icons/IconLevel.vue";
 
-import type { User } from "@/utils/types";
-import { UserSchema } from "@/utils/types";
+import {
+  type User,
+  User as UserSchema,
+  type UserStats,
+  UserStats as UserStatsSchema,
+} from "@/utils/types";
 
 const props = defineProps({
   user: {
@@ -222,6 +226,19 @@ const props = defineProps({
       if (value !== undefined && !UserSchema.safeParse(value).success) {
         throw new TypeError(
           "Invalid prop: custom validator check failed for prop 'user'"
+        );
+      }
+
+      return true;
+    },
+  },
+  stats: {
+    type: Object as PropType<UserStats>,
+    required: false,
+    validator(value: unknown) {
+      if (value !== undefined && !UserStatsSchema.safeParse(value).success) {
+        throw new TypeError(
+          "Invalid prop: custom validator check failed for prop 'stats'"
         );
       }
 

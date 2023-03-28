@@ -2,6 +2,7 @@
   <main class="page-wrapper">
     <SteamProfileBlock
       :user="authStore.user"
+      :user-stats="usersStore.stats"
       :loading="loadingStore.loading || authStore.loading"
     />
 
