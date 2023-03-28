@@ -1,7 +1,20 @@
 import { z } from "zod";
 
+// 👇 Декорации профиля для извлечения объекта
+// пользователя из базы и объединения с профилем из Steam
+export const ProfileDecorations = z.object({
+  avatar: z.string(), // аватар (URL)
+  frame: z.string(), // рамка аватара (URL)
+  background: z.string(), // основной фон профиля (URL)
+  miniProfileBackground: z.string(), // фон мини-профиля (URL)
+});
+
+export type ProfileDecorations = z.infer<typeof ProfileDecorations>;
+// 👆 Декорации профиля для извлечения объекта
+// пользователя из базы и объединения с профилем из Steam
+
 // 👇 Профиль пользователя Steam с дополнениями
-export const UserSchema = z.object({
+export const User = z.object({
   steamid: z.string(), // SteamID - участвует почти во всех запросах к API Steam
   personaname: z.string(), // Никнэйм (последний указанный)
   profileurl: z.string(), // Ссылка на страницу профиля
@@ -24,20 +37,16 @@ export const UserSchema = z.object({
   playerlevel: z.nullable(z.number()),
   gameid: z.string().optional(),
   gameextrainfo: z.string().optional(),
-  decorations: z.object({
-    avatar: z.string(),
-    frame: z.string(),
-    background: z.string(),
-    miniProfileBackground: z.string(),
-  }),
+  decorations: z.object(ProfileDecorations.shape),
 });
 
-export type User = z.infer<typeof UserSchema>;
+export type User = z.infer<typeof User>;
 // 👆 Профиль пользователя Steam с дополнениями
 
 // 👇 Глобальная статистика пользователя для вывода в мини-профиле
-export const UserStatsSchema = z.object({
-  games: z.object({ // статистика по количеству игр и степени получения достижений
+export const UserStats = z.object({
+  // статистика по количеству игр и степени получения достижений
+  games: z.object({
     platinum: z.nullable(z.number()).default(null), // 100% достижений
     gold: z.nullable(z.number()).default(null), // 90% - 99% достижений
     silver: z.nullable(z.number()).default(null), // 75% - 90% достижений
@@ -45,18 +54,5 @@ export const UserStatsSchema = z.object({
   }),
 });
 
-export type UserStats = z.infer<typeof UserStatsSchema>;
+export type UserStats = z.infer<typeof UserStats>;
 // 👆 Глобальная статистика пользователя для вывода в мини-профиле
-
-// 👇 Декорации профиля для извлечения объекта
-// пользователя из базы и объединения с профилем из Steam
-export const ProfileDecorationsSchema = z.object({
-  avatar: z.string(), // аватар (URL)
-  frame: z.string(), // рамка аватара (URL)
-  background: z.string(), // основной фон профиля (URL)
-  miniProfileBackground: z.string(), // фон мини-профиля (URL)
-});
-
-export type ProfileDecorations = z.infer<typeof ProfileDecorationsSchema>;
-// 👆 Декорации профиля для извлечения объекта
-// пользователя из базы и объединения с профилем из Steam
